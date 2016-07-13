@@ -53,7 +53,8 @@
         android:layout_toRightOf="@+id/highlightTitle"
         android:layout_toEndOf="@+id/highlightTitle"
         android:layout_alignBaseline="@+id/highlightTitle"
-        android:layout_marginLeft="3dp" />
+        android:layout_marginLeft="3dp"
+        android:onClick="changeColor" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -66,20 +67,66 @@
         android:layout_toEndOf="@+id/highlightRed"
         android:layout_alignBaseline="@+id/highlightTitle"
         android:background="#ffff00"
-        android:layout_marginLeft="3dp" />
+        android:layout_marginLeft="3dp"
+        android:onClick="changeColor" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/highlight_blue"
-        android:id="@+id/button"
+        android:id="@+id/highlightBlue"
         android:layout_alignTop="@+id/highlightTitle"
         android:layout_toRightOf="@+id/highlightYellow"
         android:layout_toEndOf="@+id/highlightYellow"
         android:layout_alignBaseline="@+id/highlightTitle"
         android:layout_marginLeft="3dp"
         android:textColor="#ffffff"
-        android:background="@android:color/holo_blue_dark" />
+        android:background="@android:color/holo_blue_dark"
+        android:onClick="changeColor" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/highlight_purple"
+        android:id="@+id/highlightPurple"
+        android:layout_alignTop="@+id/highlightTitle"
+        android:layout_toRightOf="@+id/highlightBlue"
+        android:layout_toEndOf="@+id/highlightBlue"
+        android:layout_marginLeft="3dp"
+        android:layout_alignBaseline="@+id/highlightTitle"
+        android:background="@android:color/holo_purple"
+        android:textColor="#ffffff"
+        android:onClick="changeColor" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/highlight_brown"
+        android:id="@+id/highlightBrown"
+        android:layout_alignTop="@+id/highlightTitle"
+        android:layout_toRightOf="@+id/highlightPurple"
+        android:layout_toEndOf="@+id/highlightPurple"
+        android:layout_marginLeft="3dp"
+        android:layout_alignBaseline="@+id/highlightTitle"
+        android:background="#700606"
+        android:textColor="#ffffff"
+        android:onClick="changeColor" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/drawingmode"
+        android:id="@+id/drawingMode"
+        android:layout_alignTop="@+id/highlightTitle"
+        android:layout_toRightOf="@+id/highlightBrown"
+        android:layout_toEndOf="@+id/highlightBrown"
+        android:layout_marginLeft="3dp"
+        android:layout_alignBaseline="@+id/highlightTitle"
+        android:background="#e6d6d6"
+        android:onClick="changeColor" />
 
 </RelativeLayout>

@@ -17,7 +17,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 
+import static android.graphics.Color.BLACK;
+import static android.graphics.Color.BLUE;
+import static android.graphics.Color.RED;
 import static android.graphics.Color.WHITE;
+import static android.graphics.Color.YELLOW;
 
 public class CanvasView extends ImageView {
 
@@ -128,5 +132,34 @@ public class CanvasView extends ImageView {
                 break;
         }
         return true;
+    }
+
+    public void changeModeAndColor(int color) {
+        switch (color) {
+            case 1:
+                mPaint.setColor(Color.argb(150,0xcc,0,0));
+                mPaint.setStrokeWidth(6f);
+                break;
+            case 2:
+                mPaint.setColor(Color.argb(150,0xff,0xff,0));
+                mPaint.setStrokeWidth(6f);
+                break;
+            case 3:
+                mPaint.setColor(Color.argb(150,0,0x99,0xcc));
+                mPaint.setStrokeWidth(6f);
+                break;
+            case 4:
+                mPaint.setColor(Color.argb(150,0xaa,0x66,0xcc));
+                mPaint.setStrokeWidth(6f);
+                break;
+            case 5:
+                mPaint.setColor(Color.argb(150,0x70,0x06,0x06));
+                mPaint.setStrokeWidth(6f);
+                break;
+            case 6:
+                mPaint.setColor(WHITE);
+                mPaint.setStrokeWidth(4f);
+                break;
+        }
     }
 }

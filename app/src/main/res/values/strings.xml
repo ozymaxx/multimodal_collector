@@ -7,4 +7,5 @@
     <string name="highlight_purple">Purple</string>
     <string name="highlight_blue">Blue</string>
     <string name="highlight_red">Red</string>
+    <string name="drawingmode">Drawing Mode</string>
 </resources>

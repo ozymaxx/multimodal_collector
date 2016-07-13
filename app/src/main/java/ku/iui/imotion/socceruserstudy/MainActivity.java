@@ -19,4 +19,29 @@ public class MainActivity extends AppCompatActivity {
     public void clearCanvas(View v) {
         queryCanvas.clearCanvas();
     }
+
+    public void changeColor(View v) {
+        int vid = v.getId();
+
+        switch (vid) {
+            case R.id.highlightBlue:
+                queryCanvas.changeModeAndColor(3);
+                break;
+            case R.id.highlightPurple:
+                queryCanvas.changeModeAndColor(4);
+                break;
+            case R.id.highlightRed:
+                queryCanvas.changeModeAndColor(1);
+                break;
+            case R.id.highlightYellow:
+                queryCanvas.changeModeAndColor(2);
+                break;
+            case R.id.highlightBrown:
+                queryCanvas.changeModeAndColor(5);
+                break;
+            case R.id.drawingMode:
+                queryCanvas.changeModeAndColor(6);
+                break;
+        }
+    }
 }
