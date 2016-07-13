@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Game Retrieval User Study</string>
+    <string name="clear_canvas">Clear Canvas</string>
+    <string name="highlight_title">Highlighting Colors</string>
+    <string name="highlight_brown">Brown</string>
+    <string name="highlight_yellow">Yellow</string>
+    <string name="highlight_purple">Purple</string>
+    <string name="highlight_blue">Blue</string>
+    <string name="highlight_red">Red</string>
+</resources>
