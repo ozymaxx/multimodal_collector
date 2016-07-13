@@ -83,6 +83,7 @@ public class CanvasView extends ImageView {
         super.onDraw(canvas);
         // draw the mPath with the mPaint on the canvas when onDraw
 
+        // many strokes
         for (int i = 0; i < mPaths.size(); i++) {
             canvas.drawPath(mPaths.get(i), mPaints.get(i));
         }
