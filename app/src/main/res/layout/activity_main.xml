@@ -129,4 +129,15 @@
         android:background="#e6d6d6"
         android:onClick="changeColor" />
 
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Button"
+        android:id="@+id/stopRecording"
+        android:layout_alignTop="@+id/highlightTitle"
+        android:layout_toRightOf="@+id/drawingMode"
+        android:layout_toEndOf="@+id/drawingMode"
+        android:onClick="stopRecording" />
+
 </RelativeLayout>
