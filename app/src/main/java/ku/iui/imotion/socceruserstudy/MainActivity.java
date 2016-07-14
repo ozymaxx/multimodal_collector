@@ -1,5 +1,7 @@
 package ku.iui.imotion.socceruserstudy;
 
+import android.hardware.Camera;
+import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
@@ -12,9 +14,12 @@ import java.io.IOException;
 public class MainActivity extends AppCompatActivity {
 
     private static String mFileName = Environment.getExternalStorageDirectory().getAbsolutePath() + "/aq.3gp";
+    private static String videoFileName = Environment.getExternalStorageDirectory().getAbsolutePath() + "/aqv.mp4";
 
     private CanvasView queryCanvas;
     private MediaRecorder soundRecorder;
+    private MediaRecorder videoRecorder;
+    private Camera mCamera;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
         queryCanvas = (CanvasView) findViewById(R.id.queryCanvas);
         startRecording();
+        startVideoRecording();
     }
 
     public void clearCanvas(View v) {
@@ -64,19 +70,79 @@ public class MainActivity extends AppCompatActivity {
         try {
             soundRecorder.prepare();
         } catch (IOException e) {
+            stopRecordingHelper();
             Log.e("AudioRecording", "prepare() failed");
         }
 
         soundRecorder.start();
     }
 
-    public void stopRecording(View v) {
+    private void stopRecordingHelper() {
         soundRecorder.stop();
         soundRecorder.release();
         soundRecorder = null;
+    }
 
+    public void stopRecording(View v) {
+        stopRecordingHelper();
+        releaseVideoRecorder();
         v.setClickable(false);
     }
 
+    private void releaseVideoRecorder() {
+        if (videoRecorder != null) {
+            videoRecorder.reset(); // clear recorder configuration
+            videoRecorder.release(); // release the recorder object
+            videoRecorder = null;
+            mCamera.lock(); // lock camera for later use
+        }
+    }
 
+    private int findFrontFacingCamera() {
+        int cameraId = -1;
+        // Search for the front facing camera
+        int numberOfCameras = Camera.getNumberOfCameras();
+        for (int i = 0; i < numberOfCameras; i++) {
+            Camera.CameraInfo info = new Camera.CameraInfo();
+            Camera.getCameraInfo(i, info);
+            if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+                cameraId = i;
+                break;
+            }
+        }
+        return cameraId;
+    }
+
+    private void startVideoRecording() {
+        int cameraId = findFrontFacingCamera();
+
+        if (cameraId >= 0) {
+            // open the backFacingCamera
+            // set a picture callback
+            // refresh the preview
+            mCamera = Camera.open(cameraId);
+        }
+
+        videoRecorder = new MediaRecorder();
+        mCamera.unlock();
+        videoRecorder.setCamera(mCamera);
+        //videoRecorder.setAudioSource(MediaRecorder.AudioSource.CAMCORDER);
+        videoRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
+        //videoRecorder.setProfile(CamcorderProfile.get(CamcorderProfile.QUALITY_720P));
+        Log.d("videorecord","opened");
+        videoRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+        videoRecorder.setOutputFile(videoFileName);
+        //videoRecorder.setMaxDuration(600000); // set maximum duration
+        //videoRecorder.setMaxFileSize(50000000); // set maximum file size
+
+        try {
+            videoRecorder.prepare();
+        } catch (IllegalStateException e) {
+            releaseVideoRecorder();
+            Log.e("VideoRecording", "prepare() failed");
+        } catch (IOException e) {
+            releaseVideoRecorder();
+            Log.e("VideoRecording", "cam i/o failed");
+        }
+    }
 }
