@@ -13,10 +13,17 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 import static android.graphics.Color.BLACK;
@@ -27,6 +34,9 @@ import static android.graphics.Color.YELLOW;
 
 public class CanvasView extends ImageView {
 
+    final static String stationIp = "172.20.33.42";
+    final int stationPort = 3440;
+
     public int width;
     public int height;
     private Bitmap mBitmap;
@@ -36,6 +46,9 @@ public class CanvasView extends ImageView {
     private ArrayList<Paint> mPaints;
     private float mX, mY;
     private static final float TOLERANCE = 0;
+    private InetAddress stationAddr;
+    private DatagramSocket clientSocket;
+    private PointSubmissionTask pointSubmission;
 
     private Sketch sketch;
 
@@ -54,6 +67,21 @@ public class CanvasView extends ImageView {
         mPaints.add(newPaint(WHITE,4f));
 
         sketch = new Sketch();
+
+        try {
+            clientSocket = new DatagramSocket();
+            stationAddr = InetAddress.getByName(stationIp);
+        } catch (UnknownHostException e) {
+            Log.e("StationConn",e.getMessage());
+            stationAddr = null;
+            clientSocket = null;
+            pointSubmission = null;
+        } catch (SocketException e) {
+            Log.e("StationConn",e.getMessage());
+            stationAddr = null;
+            clientSocket = null;
+            pointSubmission = null;
+        }
     }
 
     public Paint newPaint(int c,float strokeWidth) {
@@ -89,6 +117,10 @@ public class CanvasView extends ImageView {
         }
     }
 
+    private void sendPointCoords( float x, float y) {
+        new PointSubmissionTask(stationAddr,clientSocket,stationPort,stationIp).execute(x,y);
+    }
+
     // when ACTION_DOWN start touch according to the x,y values
     private void startTouch(float x, float y) {
         mPaths.get(mPaths.size()-1).moveTo(x, y);
@@ -97,6 +129,8 @@ public class CanvasView extends ImageView {
 
         sketch.newStroke();
         sketch.addPoint(x,y);
+
+        sendPointCoords(x,y);
     }
 
     // when ACTION_MOVE move touch according to the x,y values
@@ -109,6 +143,8 @@ public class CanvasView extends ImageView {
             mY = y;
 
             sketch.addPoint(x,y);
+
+            sendPointCoords(x,y);
         }
     }
 
