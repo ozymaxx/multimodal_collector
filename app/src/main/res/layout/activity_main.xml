@@ -140,4 +140,12 @@
         android:layout_toEndOf="@+id/drawingMode"
         android:onClick="stopRecording" />
 
+    <SurfaceView
+        android:layout_width="1px"
+        android:layout_height="1px"
+        android:id="@+id/surfaceView"
+        android:layout_alignTop="@+id/stopRecording"
+        android:layout_toRightOf="@+id/stopRecording"
+        android:layout_toEndOf="@+id/stopRecording" />
+
 </RelativeLayout>
