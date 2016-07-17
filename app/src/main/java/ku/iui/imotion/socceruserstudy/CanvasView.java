@@ -117,8 +117,12 @@ public class CanvasView extends ImageView {
         }
     }
 
-    private void sendPointCoords( float x, float y) {
-        new PointSubmissionTask(stationAddr,clientSocket,stationPort,stationIp).execute(x,y);
+    private void sendPointCoords( float x, float y, long timestamp) {
+        new PointSubmissionTask(stationAddr,clientSocket,stationPort,stationIp).execute(x,y,(float) timestamp);
+    }
+
+    private void sendStrokeInformation(String str) {
+        new StrokeInformationSubmissionTask(stationAddr,clientSocket,stationPort,stationIp).execute(str);
     }
 
     // when ACTION_DOWN start touch according to the x,y values
@@ -128,9 +132,10 @@ public class CanvasView extends ImageView {
         mY = y;
 
         sketch.newStroke();
-        sketch.addPoint(x,y);
+        sendStrokeInformation("STRSTART");
 
-        sendPointCoords(x,y);
+        sketch.addPoint(x,y);
+        sendPointCoords(x,y,System.currentTimeMillis());
     }
 
     // when ACTION_MOVE move touch according to the x,y values
@@ -144,7 +149,7 @@ public class CanvasView extends ImageView {
 
             sketch.addPoint(x,y);
 
-            sendPointCoords(x,y);
+            sendPointCoords(x,y,System.currentTimeMillis());
         }
     }
 
@@ -169,7 +174,6 @@ public class CanvasView extends ImageView {
         mPaths.get(mPaths.size()-1).lineTo(mX, mY);
 
         sketch.addPoint(mX,mY);
-        sketch.leaveStroke();
 
         mPaths.add(new Path());
 

@@ -9,16 +9,16 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 
 /**
- * Created by ozymaxx on 16.07.2016.
+ * Created by ozymaxx on 17.07.2016.
  */
 
-public class PointSubmissionTask extends AsyncTask<Float,Void,Void> {
+public class StrokeInformationSubmissionTask extends AsyncTask<String,Void,Void> {
     private InetAddress addr;
     private DatagramSocket socket;
     private int port;
     private String ip;
 
-    public PointSubmissionTask(InetAddress addr, DatagramSocket socket, int port, String ip) {
+    public StrokeInformationSubmissionTask(InetAddress addr, DatagramSocket socket, int port, String ip) {
         this.addr = addr;
         this.socket = socket;
         this.port = port;
@@ -26,13 +26,9 @@ public class PointSubmissionTask extends AsyncTask<Float,Void,Void> {
     }
 
     @Override
-    protected Void doInBackground(Float... floats) {
-        float x = floats[0];
-        float y = floats[1];
-        long timestamp = (long) ((float) floats[2]);
-
+    protected Void doInBackground(String... strings) {
         try {
-            byte[] buffer = ("("+x+","+y+","+timestamp+")").getBytes();
+            byte[] buffer = ("("+strings[0]+")").getBytes();
             socket.send(new DatagramPacket(buffer,buffer.length,addr,port));
         } catch (IOException e) {
             Log.e("StationConn",e.getMessage());
