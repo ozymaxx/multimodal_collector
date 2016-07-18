@@ -13,7 +13,7 @@ import java.net.InetAddress;
  * Created by ozymaxx on 17.07.2016.
  */
 
-public class StrokeInformationSubmissionTask extends AsyncTask<String,Void,Void> {
+public class StrokeInformationSubmissionTask extends AsyncTask<Object,Void,Void> {
     private DataOutputStream out;
 
     public StrokeInformationSubmissionTask(DataOutputStream out) {
@@ -21,9 +21,14 @@ public class StrokeInformationSubmissionTask extends AsyncTask<String,Void,Void>
     }
 
     @Override
-    protected Void doInBackground(String... strings) {
+    protected Void doInBackground(Object... objects) {
         try {
-            out.writeChars("("+strings[0]+")");
+            int width = (int) ((float) objects[1]);
+            int r = (Integer) objects[2];
+            int g = (Integer) objects[3];
+            int b = (Integer) objects[4];
+            int a = (Integer) objects[5];
+            out.writeChars("("+objects[0]+","+width+","+r+","+g+","+b+","+a+")");
         } catch (IOException e) {
             Log.e("StationConn",e.getMessage());
         } catch (NullPointerException e) {

@@ -39,7 +39,9 @@ public class CanvasView extends ImageView {
 
     final static String stationIp = "172.20.33.42";
     //final static String stationIp = "212.175.32.131";
-    final int stationPort = 3440;
+    final static int stationPort = 3440;
+    final static float THINNER = 4f;
+    final static float THICKER = 8f;
 
     public int width;
     public int height;
@@ -53,6 +55,8 @@ public class CanvasView extends ImageView {
     private Socket client;
     private OutputStream outToServer;
     private DataOutputStream out;
+    private float curStrokeWidth;
+    private int curr,curg,curb,cura;
 
     private Sketch sketch;
 
@@ -68,7 +72,8 @@ public class CanvasView extends ImageView {
         mPaths.add(mPath);
 
         // and we set a new Paint with the desired attributes
-        mPaints.add(newPaint(WHITE,4f));
+        curStrokeWidth = THINNER;
+        mPaints.add(newPaint(WHITE,curStrokeWidth));
 
         sketch = new Sketch();
 
@@ -132,10 +137,10 @@ public class CanvasView extends ImageView {
         }
     }
 
-    private void sendStrokeInformation(String str) {
+    private void sendStrokeInformation(String str,float width,int r,int g,int b,int a) {
         //new StrokeInformationSubmissionTask(stationAddr,clientSocket,stationPort,stationIp).execute(str);
         if (out != null) {
-            new StrokeInformationSubmissionTask(out).execute(str);
+            new StrokeInformationSubmissionTask(out).execute(str,width,r,g,b,a);
         }
         else {
             Log.e("StationConn","Connection problem");
@@ -159,7 +164,7 @@ public class CanvasView extends ImageView {
         mY = y;
 
         sketch.newStroke();
-        sendStrokeInformation("STRSTART");
+        sendStrokeInformation("STRSTART",curStrokeWidth,curr,curg,curb,cura);
 
         sketch.addPoint(x,y);
         sendPointCoords(x,y,System.currentTimeMillis());
@@ -189,7 +194,8 @@ public class CanvasView extends ImageView {
         mPaths.add(new Path());
 
         mPaints = new ArrayList<Paint>();
-        mPaints.add(newPaint(WHITE,4f));
+        curStrokeWidth = THINNER;
+        mPaints.add(newPaint(WHITE,curStrokeWidth));
 
         invalidate();
 
@@ -236,28 +242,40 @@ public class CanvasView extends ImageView {
 
         switch (color) {
             case 1:
-                mPaint.setColor(Color.argb(150,0xcc,0,0));
-                mPaint.setStrokeWidth(6f);
+                cura = 150;curr = 0xcc;curg = 0; curb = 0;
+                mPaint.setColor(Color.argb(cura,curr,curg,curb));
+                curStrokeWidth = THICKER;
+                mPaint.setStrokeWidth(curStrokeWidth);
                 break;
             case 2:
-                mPaint.setColor(Color.argb(150,0xff,0xff,0));
-                mPaint.setStrokeWidth(6f);
+                cura = 150;curr = 0xff;curg = 0xff;curb = 0;
+                mPaint.setColor(Color.argb(cura,curr,curg,curb));
+                curStrokeWidth = THICKER;
+                mPaint.setStrokeWidth(curStrokeWidth);
                 break;
             case 3:
-                mPaint.setColor(Color.argb(150,0,0x99,0xcc));
-                mPaint.setStrokeWidth(6f);
+                cura = 150;curr = 0;curg = 0x99;curb = 0xcc;
+                mPaint.setColor(Color.argb(cura,curr,curg,curb));
+                curStrokeWidth = THICKER;
+                mPaint.setStrokeWidth(curStrokeWidth);
                 break;
             case 4:
-                mPaint.setColor(Color.argb(150,0xaa,0x66,0xcc));
-                mPaint.setStrokeWidth(6f);
+                cura = 150;curr = 0xaa;curg = 0x66;curb = 0xcc;
+                mPaint.setColor(Color.argb(cura,curr,curg,curb));
+                curStrokeWidth = THICKER;
+                mPaint.setStrokeWidth(curStrokeWidth);
                 break;
             case 5:
-                mPaint.setColor(Color.argb(150,0x70,0x06,0x06));
-                mPaint.setStrokeWidth(6f);
+                cura = 150;curr = 0x70;curg = 0x06;curb = 0x06;
+                mPaint.setColor(Color.argb(cura,curr,curg,curb));
+                curStrokeWidth = THICKER;
+                mPaint.setStrokeWidth(curStrokeWidth);
                 break;
             case 6:
+                cura = 255;curr = 255;curg = 255;curb = 255;
                 mPaint.setColor(WHITE);
-                mPaint.setStrokeWidth(4f);
+                curStrokeWidth = THINNER;
+                mPaint.setStrokeWidth(curStrokeWidth);
                 break;
         }
     }
