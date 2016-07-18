@@ -18,10 +18,13 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -35,6 +38,7 @@ import static android.graphics.Color.YELLOW;
 public class CanvasView extends ImageView {
 
     final static String stationIp = "172.20.33.42";
+    //final static String stationIp = "212.175.32.131";
     final int stationPort = 3440;
 
     public int width;
@@ -46,9 +50,9 @@ public class CanvasView extends ImageView {
     private ArrayList<Paint> mPaints;
     private float mX, mY;
     private static final float TOLERANCE = 0;
-    private InetAddress stationAddr;
-    private DatagramSocket clientSocket;
-    private PointSubmissionTask pointSubmission;
+    private Socket client;
+    private OutputStream outToServer;
+    private DataOutputStream out;
 
     private Sketch sketch;
 
@@ -68,19 +72,20 @@ public class CanvasView extends ImageView {
 
         sketch = new Sketch();
 
+        new SocketSubmissionTask(this).execute(stationIp,stationPort);
+    }
+
+    public void bringSocket(Socket resultSocket) {
+        this.client = resultSocket;
+
         try {
-            clientSocket = new DatagramSocket();
-            stationAddr = InetAddress.getByName(stationIp);
-        } catch (UnknownHostException e) {
+            outToServer = client.getOutputStream();
+            out = new DataOutputStream(outToServer);
+        } catch (IOException e) {
             Log.e("StationConn",e.getMessage());
-            stationAddr = null;
-            clientSocket = null;
-            pointSubmission = null;
-        } catch (SocketException e) {
-            Log.e("StationConn",e.getMessage());
-            stationAddr = null;
-            clientSocket = null;
-            pointSubmission = null;
+            outToServer = null;
+            client = null;
+            out = null;
         }
     }
 
@@ -118,11 +123,33 @@ public class CanvasView extends ImageView {
     }
 
     private void sendPointCoords( float x, float y, long timestamp) {
-        new PointSubmissionTask(stationAddr,clientSocket,stationPort,stationIp).execute(x,y,(float) timestamp);
+        //new PointSubmissionTask(stationAddr,clientSocket,stationPort,stationIp).execute(x,y,(float) timestamp);
+        if (out != null) {
+            new PointSubmissionTask(out).execute(x,y,(float) timestamp);
+        }
+        else {
+            Log.e("StationConn","Connection problem");
+        }
     }
 
     private void sendStrokeInformation(String str) {
-        new StrokeInformationSubmissionTask(stationAddr,clientSocket,stationPort,stationIp).execute(str);
+        //new StrokeInformationSubmissionTask(stationAddr,clientSocket,stationPort,stationIp).execute(str);
+        if (out != null) {
+            new StrokeInformationSubmissionTask(out).execute(str);
+        }
+        else {
+            Log.e("StationConn","Connection problem");
+        }
+    }
+
+    public void endConnection() {
+        try {
+            if (client != null) {
+                client.close();
+            }
+        } catch (IOException e) {
+            Log.e("StationConn",e.getMessage());
+        }
     }
 
     // when ACTION_DOWN start touch according to the x,y values

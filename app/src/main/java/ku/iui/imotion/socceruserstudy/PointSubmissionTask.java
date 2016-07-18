@@ -3,6 +3,7 @@ package ku.iui.imotion.socceruserstudy;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -13,16 +14,10 @@ import java.net.InetAddress;
  */
 
 public class PointSubmissionTask extends AsyncTask<Float,Void,Void> {
-    private InetAddress addr;
-    private DatagramSocket socket;
-    private int port;
-    private String ip;
+    private DataOutputStream out;
 
-    public PointSubmissionTask(InetAddress addr, DatagramSocket socket, int port, String ip) {
-        this.addr = addr;
-        this.socket = socket;
-        this.port = port;
-        this.ip = ip;
+    public PointSubmissionTask(DataOutputStream out) {
+        this.out = out;
     }
 
     @Override
@@ -32,8 +27,7 @@ public class PointSubmissionTask extends AsyncTask<Float,Void,Void> {
         long timestamp = (long) ((float) floats[2]);
 
         try {
-            byte[] buffer = ("("+x+","+y+","+timestamp+")").getBytes();
-            socket.send(new DatagramPacket(buffer,buffer.length,addr,port));
+            out.writeChars("("+x+","+y+","+timestamp+")");
         } catch (IOException e) {
             Log.e("StationConn",e.getMessage());
         } catch (NullPointerException e) {

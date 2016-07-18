@@ -263,6 +263,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         super.onStop();
         releaseMediaRecorder();
         releaseCamera();
+        queryCanvas.endConnection();
     }
 
     /*

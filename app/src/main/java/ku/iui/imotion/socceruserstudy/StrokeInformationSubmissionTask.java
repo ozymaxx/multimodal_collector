@@ -3,6 +3,7 @@ package ku.iui.imotion.socceruserstudy;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -13,23 +14,16 @@ import java.net.InetAddress;
  */
 
 public class StrokeInformationSubmissionTask extends AsyncTask<String,Void,Void> {
-    private InetAddress addr;
-    private DatagramSocket socket;
-    private int port;
-    private String ip;
+    private DataOutputStream out;
 
-    public StrokeInformationSubmissionTask(InetAddress addr, DatagramSocket socket, int port, String ip) {
-        this.addr = addr;
-        this.socket = socket;
-        this.port = port;
-        this.ip = ip;
+    public StrokeInformationSubmissionTask(DataOutputStream out) {
+        this.out = out;
     }
 
     @Override
     protected Void doInBackground(String... strings) {
         try {
-            byte[] buffer = ("("+strings[0]+")").getBytes();
-            socket.send(new DatagramPacket(buffer,buffer.length,addr,port));
+            out.writeChars("("+strings[0]+")");
         } catch (IOException e) {
             Log.e("StationConn",e.getMessage());
         } catch (NullPointerException e) {
