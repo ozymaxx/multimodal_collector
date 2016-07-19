@@ -73,6 +73,7 @@ public class CanvasView extends ImageView {
 
         // and we set a new Paint with the desired attributes
         curStrokeWidth = THINNER;
+        cura = 255;curr = 255;curg = 255;curb = 255;
         mPaints.add(newPaint(WHITE,curStrokeWidth));
 
         sketch = new Sketch();
