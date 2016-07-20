@@ -8,4 +8,38 @@
     <string name="highlight_blue">Blue</string>
     <string name="highlight_red">Red</string>
     <string name="drawingmode">Drawing Mode</string>
+
+    <string name="app_name_tr">Oyun Senaryosu Bulup Getirme Çalışması</string>
+    <string name="clear_canvas_tr">Temizle</string>
+    <string name="highlight_title_tr">Çizim Belirtme Renkleri</string>
+    <string name="highlight_brown_tr">K.Rengi</string>
+    <string name="highlight_yellow_tr">Sarı</string>
+    <string name="highlight_purple_tr">Mor</string>
+    <string name="highlight_blue_tr">Mavi</string>
+    <string name="highlight_red_tr">Kırmızı</string>
+    <string name="drawingmode_tr">Çizim Modu</string>
+
+    <string name="welcome_message">Thanks for the participation. Your participation will be very beneficial for us.
+        When you are ready to go just click on the button below.
+        \n\n
+        Please keep in mind that we will be recording your sketch. Moreover, during the experiment, the environment will
+        be monitored with two cameras.
+    </string>
+    <string name="next_step">Next</string>
+    <string name="consent">By clicking Next you will have allowed the data collected in this study to be used for academic and scientific purposes.</string>
+    <string name="applicationstate">Connection Status</string>
+    <string name="other_tablet">Other Tablet</string>
+    <string name="server">Station for Data Collection</string>
+
+    <string name="welcome_message_tr">Çalışmamıza katıldığınız için teşekkürler. Katılımınız çalışmamızı yürütmemiz için
+        çok faydalı olacaktır. Hazır olduğunuzda aşağıdaki butona tıklayarak çalışmaya başlayabilirsiniz.
+        \n\n
+        Deney boyunca çiziminizi kaydedeceğimizi aklınızda bulundurun. Bunun yanında, deney boyunca ortam iki kamera ile
+        izlenecektir.
+    </string>
+    <string name="next_step_tr">Sonraki Adım</string>
+    <string name="consent_tr">Sonraki Adım\'a tıkladığınızda bu deneyde toplanan verilerin akademik ve bilimsel kullanımına izin vermiş olacaksınız.</string>
+    <string name="applicationstate_tr">Uygulama Bağlantı Kontrolü</string>
+    <string name="other_tablet_tr">Diğer Tablet</string>
+    <string name="server_tr">Bilgileri Toplama Sunucusu</string>
 </resources>

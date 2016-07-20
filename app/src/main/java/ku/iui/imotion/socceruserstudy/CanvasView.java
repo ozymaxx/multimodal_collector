@@ -78,7 +78,12 @@ public class CanvasView extends ImageView {
 
         sketch = new Sketch();
 
-        new SocketSubmissionTask(this).execute(stationIp,stationPort);
+        client = ConnectionStatusActivity.client;
+        outToServer = ConnectionStatusActivity.outToServer;
+        out = ConnectionStatusActivity.out;
+
+        // DIKKAT
+        //new SocketSubmissionTask(this).execute(stationIp,stationPort);
     }
 
     public void bringSocket(Socket resultSocket) {

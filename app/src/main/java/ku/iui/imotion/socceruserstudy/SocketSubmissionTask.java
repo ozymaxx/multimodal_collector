@@ -12,9 +12,16 @@ import java.net.Socket;
 
 public class SocketSubmissionTask extends AsyncTask<Object,Void,Socket> {
     private CanvasView delegate;
+    private ConnectionStatusActivity delegatedActivity;
 
+    /*
     public SocketSubmissionTask(CanvasView delegate) {
         this.delegate = delegate;
+    }
+    */
+
+    public SocketSubmissionTask(ConnectionStatusActivity delegatedActivity) {
+        this.delegatedActivity = delegatedActivity;
     }
 
     @Override
@@ -32,8 +39,8 @@ public class SocketSubmissionTask extends AsyncTask<Object,Void,Socket> {
 
     @Override
     protected void onPostExecute(Socket socket) {
-        if (delegate != null) {
-            delegate.bringSocket(socket);
+        if (delegatedActivity != null) {
+            delegatedActivity.bringSocket(socket);
         }
         else {
             Log.e("StationConn","Delegation problem");
