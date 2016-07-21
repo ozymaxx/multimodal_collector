@@ -153,6 +153,15 @@ public class CanvasView extends ImageView {
         }
     }
 
+    private void sendClearDirective(String str) {
+        if (out != null) {
+            new ClearCanvasTask(out).execute(str);
+        }
+        else {
+            Log.e("StationConn","Connection problem");
+        }
+    }
+
     public void endConnection() {
         try {
             if (client != null) {
@@ -201,11 +210,13 @@ public class CanvasView extends ImageView {
 
         mPaints = new ArrayList<Paint>();
         curStrokeWidth = THINNER;
+        curr = 255;curg = 255;curb = 255;cura = 255;
         mPaints.add(newPaint(WHITE,curStrokeWidth));
 
         invalidate();
 
         sketch = new Sketch();
+        sendClearDirective("CLEAR");
     }
 
     // when ACTION_UP stop touch
