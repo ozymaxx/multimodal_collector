@@ -42,10 +42,12 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         mInitSuccesful = false;
         //startRecording();
         //startVideoRecording();
+
+        queryCanvas.setParent(this);
     }
 
     public void clearCanvas(View v) {
-        queryCanvas.clearCanvas();
+        queryCanvas.clearCanvas(true);
     }
 
     public void changeColor(View v) {
