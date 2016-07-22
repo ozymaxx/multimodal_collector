@@ -40,7 +40,9 @@ public class SocketSubmissionTask extends AsyncTask<Object,Void,Socket> {
     @Override
     protected void onPostExecute(Socket socket) {
         if (delegatedActivity != null) {
-            delegatedActivity.bringSocket(socket);
+            synchronized (delegatedActivity) {
+                delegatedActivity.bringSocket(socket);
+            }
         }
         else {
             Log.e("StationConn","Delegation problem");

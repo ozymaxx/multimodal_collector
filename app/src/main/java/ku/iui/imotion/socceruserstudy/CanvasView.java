@@ -18,6 +18,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -55,6 +56,7 @@ public class CanvasView extends ImageView {
     private Socket client;
     private OutputStream outToServer;
     private DataOutputStream out;
+    private DataInputStream in;
     private float curStrokeWidth;
     private int curr,curg,curb,cura;
 
@@ -81,6 +83,9 @@ public class CanvasView extends ImageView {
         client = ConnectionStatusActivity.client;
         outToServer = ConnectionStatusActivity.outToServer;
         out = ConnectionStatusActivity.out;
+        in = ConnectionStatusActivity.in;
+
+        new PeerSketchThread(in).start();
 
         // DIKKAT
         //new SocketSubmissionTask(this).execute(stationIp,stationPort);
