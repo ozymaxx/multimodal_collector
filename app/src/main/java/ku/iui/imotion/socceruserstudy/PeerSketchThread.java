@@ -55,6 +55,7 @@ public class PeerSketchThread extends Thread {
 
                     synchronized (delegatedCanvas) {
                         delegatedCanvas.changePeerColor(width,r,g,b,a);
+                        //Log.e("xx","xx");
                     }
 
                     justStarted = true;
@@ -71,41 +72,26 @@ public class PeerSketchThread extends Thread {
                 }
                 else {
                     if (!(delims[0].equals(STROKE_END))) {
-                        x = Float.parseFloat(delims[1]);
-                        y = Float.parseFloat(delims[2]);
+                        x = Float.parseFloat(delims[0]);
+                        y = Float.parseFloat(delims[1]);
 
                         synchronized (delegatedCanvas) {
                             if (justStarted) {
-                                delegatedCanvas.startTouch(x, y, false);
+                                delegatedCanvas.parent.runOnUiThread(new RemoteDraw(delegatedCanvas,x,y,CanvasView.REMOTE_START));
                                 justStarted = false;
                             } else {
-                                delegatedCanvas.moveTouch(x, y, false);
+                                delegatedCanvas.parent.runOnUiThread(new RemoteDraw(delegatedCanvas,x,y,CanvasView.REMOTE_MOVE));
                             }
-
-                            delegatedCanvas.parent.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    delegatedCanvas.invalidate();
-                                    //Log.e("xx","yy");
-                                }
-                            });
                         }
                     }
                     else {
                         synchronized (delegatedCanvas) {
-                            delegatedCanvas.parent.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    delegatedCanvas.upTouch(false);
-                                    delegatedCanvas.invalidate();
-                                    //Log.e("xx","zz");
-                                }
-                            });
+                            delegatedCanvas.parent.runOnUiThread(new RemoteDraw(delegatedCanvas,0,0,CanvasView.REMOTE_UP));
                         }
                     }
                 }
 
-                Log.e("PeerData", receivedContent);
+                //Log.e("PeerData", receivedContent);
                 receivedContent = "";
             } catch (EOFException e) {
                 break;

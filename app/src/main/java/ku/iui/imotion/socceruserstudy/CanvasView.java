@@ -38,6 +38,10 @@ import static android.graphics.Color.YELLOW;
 
 public class CanvasView extends ImageView {
 
+    final static int REMOTE_START = 1;
+    final static int REMOTE_MOVE = 2;
+    final static int REMOTE_UP = 3;
+
     final static String stationIp = "172.20.33.42";
     //final static String stationIp = "212.175.32.131";
     final static int stationPort = 3440;
@@ -158,6 +162,7 @@ public class CanvasView extends ImageView {
         // peer sketch
         for (int i = 0; i < peerPaths.size(); i++) {
             canvas.drawPath(peerPaths.get(i), peerPaints.get(i));
+            //Log.e("PeerDebug",""+i);
         }
     }
 
@@ -251,6 +256,10 @@ public class CanvasView extends ImageView {
             mPath.reset();
         }
 
+        for (Path pPath : peerPaths) {
+            pPath.reset();
+        }
+
         mPaths = new ArrayList<Path>();
         mPaths.add(new Path());
 
@@ -290,6 +299,7 @@ public class CanvasView extends ImageView {
         }
         else {
             peerPaths.get(peerPaths.size() - 1).lineTo(pX, pY);
+            peerPaths.add(new Path());
 
             Paint pPaint = peerPaints.get(peerPaints.size() - 1);
             peerPaints.add(newPaint(pPaint.getColor(), pPaint.getStrokeWidth()));
@@ -317,6 +327,27 @@ public class CanvasView extends ImageView {
                 break;
         }
         return true;
+    }
+
+    public void remoteTouchEvent(float x,float y,int type) {
+        Log.e("Peer","("+x+","+y+")");
+        Log.e("Peer",peerPaints.size()+"");
+        Log.e("Peer","("+pa+","+pr+","+pg+","+pb+")");
+
+        switch (type) {
+            case REMOTE_MOVE:
+                moveTouch(x,y,false);
+                invalidate();
+                break;
+            case REMOTE_START:
+                startTouch(x,y,false);
+                invalidate();
+                break;
+            case REMOTE_UP:
+                upTouch(false);
+                invalidate();
+                break;
+        }
     }
 
     public void changeModeAndColor(int color) {
