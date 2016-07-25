@@ -216,7 +216,7 @@ public class CanvasView extends ImageView {
             sendStrokeInformation("STRSTART", curStrokeWidth, curr, curg, curb, cura);
 
             sketch.addPoint(x, y);
-            sendPointCoords(x, y, System.currentTimeMillis());
+            sendPointCoords(x, y, System.nanoTime());
         }
         else {
             peerPaths.get(peerPaths.size() - 1).moveTo(x,y);
@@ -237,7 +237,7 @@ public class CanvasView extends ImageView {
 
                 sketch.addPoint(x, y);
 
-                sendPointCoords(x, y, System.currentTimeMillis());
+                sendPointCoords(x, y, System.nanoTime());
             }
         }
         else {
@@ -330,9 +330,9 @@ public class CanvasView extends ImageView {
     }
 
     public void remoteTouchEvent(float x,float y,int type) {
-        Log.e("Peer","("+x+","+y+")");
-        Log.e("Peer",peerPaints.size()+"");
-        Log.e("Peer","("+pa+","+pr+","+pg+","+pb+")");
+        //Log.e("Peer","("+x+","+y+")");
+        //Log.e("Peer",peerPaints.size()+"");
+        //Log.e("Peer","("+pa+","+pr+","+pg+","+pb+")");
 
         switch (type) {
             case REMOTE_MOVE:
