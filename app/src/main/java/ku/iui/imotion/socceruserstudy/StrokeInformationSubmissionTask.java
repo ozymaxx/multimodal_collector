@@ -28,7 +28,9 @@ public class StrokeInformationSubmissionTask extends AsyncTask<Object,Void,Void>
             int g = (Integer) objects[3];
             int b = (Integer) objects[4];
             int a = (Integer) objects[5];
-            out.writeChars("("+objects[0]+","+width+","+r+","+g+","+b+","+a+")");
+            long timen = (Long) objects[6];
+            long timem = (Long) objects[7];
+            out.writeChars("("+objects[0]+","+width+","+r+","+g+","+b+","+a+","+timen+","+timem+")");
         } catch (IOException e) {
             Log.e("StationConn",e.getMessage());
         } catch (NullPointerException e) {

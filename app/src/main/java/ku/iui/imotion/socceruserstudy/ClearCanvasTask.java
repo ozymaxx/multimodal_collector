@@ -11,7 +11,7 @@ import java.net.Socket;
  * Created by ozymaxx on 21.07.2016.
  */
 
-public class ClearCanvasTask extends AsyncTask<String,Void,Void> {
+public class ClearCanvasTask extends AsyncTask<Object,Void,Void> {
     private DataOutputStream out;
 
     public ClearCanvasTask(DataOutputStream out) {
@@ -19,9 +19,12 @@ public class ClearCanvasTask extends AsyncTask<String,Void,Void> {
     }
 
     @Override
-    protected Void doInBackground(String... strings) {
+    protected Void doInBackground(Object... objects) {
         try {
-            out.writeChars("("+strings[0]+")");
+            String directive = (String) objects[0];
+            long nano = (Long) objects[1];
+            long milli = (Long) objects[2];
+            out.writeChars("("+directive+","+nano+","+milli+")");
         } catch (IOException e) {
             Log.e("StationConn",e.getMessage());
         } catch (NullPointerException e) {

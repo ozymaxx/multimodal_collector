@@ -17,7 +17,7 @@ import java.net.Socket;
 
 public class ConnectionStatusActivity extends AppCompatActivity {
     final static int STATIONPORT = 3440;
-    final static String STATIONIP = "172.20.33.42";
+    final static String STATIONIP = "172.20.32.153";
 
     public static Socket client;
     public static OutputStream outToServer;

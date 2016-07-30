@@ -42,7 +42,7 @@ public class CanvasView extends ImageView {
     final static int REMOTE_MOVE = 2;
     final static int REMOTE_UP = 3;
 
-    final static String stationIp = "172.20.33.42";
+    final static String stationIp = "172.20.32.153";
     //final static String stationIp = "212.175.32.131";
     final static int stationPort = 3440;
     final static float THINNER = 4f;
@@ -179,7 +179,7 @@ public class CanvasView extends ImageView {
     private void sendStrokeInformation(String str,float width,int r,int g,int b,int a) {
         //new StrokeInformationSubmissionTask(stationAddr,clientSocket,stationPort,stationIp).execute(str);
         if (out != null) {
-            new StrokeInformationSubmissionTask(out).execute(str,width,r,g,b,a);
+            new StrokeInformationSubmissionTask(out).execute(str,width,r,g,b,a,System.nanoTime(),System.currentTimeMillis());
         }
         else {
             Log.e("StationConn","Connection problem");
@@ -188,7 +188,7 @@ public class CanvasView extends ImageView {
 
     private void sendClearDirective(String str) {
         if (out != null) {
-            new ClearCanvasTask(out).execute(str);
+            new ClearCanvasTask(out).execute(str,System.nanoTime(),System.currentTimeMillis());
         }
         else {
             Log.e("StationConn","Connection problem");
