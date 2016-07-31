@@ -28,11 +28,14 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     private SurfaceHolder mHolder;
     private boolean mInitSuccesful;
     private Camera.Parameters parameters;
+    private long userID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        userID = System.currentTimeMillis();
 
         queryCanvas = (CanvasView) findViewById(R.id.queryCanvas);
         mPreview = (SurfaceView) findViewById(R.id.surfaceView);
@@ -177,7 +180,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         videoRecorder.setProfile(profile);
         videoRecorder.setVideoFrameRate(15);
 
-        videoRecorder.setOutputFile(videoFileName);
+        videoRecorder.setOutputFile(Environment.getExternalStorageDirectory().getAbsolutePath() + "/userstudy_"+userID+".mp4");
         // END_INCLUDE (configure_media_recorder)
 
         // Step 5: Prepare configured MediaRecorder
@@ -213,12 +216,14 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
-        try {
-            if(!mInitSuccesful)
-                startVideoRecording();
-        } catch (Exception e) {
-            Log.e("videorec",e.getMessage());
+        //try {
+        if(!mInitSuccesful) {
+            new ClearCanvasTask(ConnectionStatusActivity.out).execute("VIDEOOPEN", System.nanoTime(), userID);
+            startVideoRecording();
         }
+        //} /*catch (Exception e) {
+            //Log.e("videorec",e.getMessage());
+        //}*/
     }
 
     @Override
