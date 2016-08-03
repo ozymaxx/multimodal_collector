@@ -17,7 +17,8 @@ import java.net.Socket;
 
 public class ConnectionStatusActivity extends AppCompatActivity {
     final static int STATIONPORT = 3440;
-    final static String STATIONIP = "172.20.32.153";
+    //final static String STATIONIP = "172.20.32.153";
+    final static String STATIONIP = "192.168.1.101";
 
     public static Socket client;
     public static OutputStream outToServer;
@@ -81,7 +82,6 @@ public class ConnectionStatusActivity extends AppCompatActivity {
 
     public void thirdStep(View view) {
         if (status) {
-            //Toast.makeText(getApplicationContext(),"OK :)", Toast.LENGTH_LONG).show();
             Intent intent = new Intent(this,MainActivity.class);
             startActivity(intent);
             finish();

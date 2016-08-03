@@ -8,6 +8,7 @@
     <string name="highlight_blue">Blue</string>
     <string name="highlight_red">Red</string>
     <string name="drawingmode">Drawing Mode</string>
+    <string name="exit">Exit</string>
 
     <string name="app_name_tr">Oyun Senaryosu Bulup Getirme Çalışması</string>
     <string name="clear_canvas_tr">Temizle</string>
@@ -18,6 +19,7 @@
     <string name="highlight_blue_tr">Mavi</string>
     <string name="highlight_red_tr">Kırmızı</string>
     <string name="drawingmode_tr">Çizim Modu</string>
+    <string name="exit_tr">Çıkış</string>
 
     <string name="welcome_message">Thanks for the participation. Your participation will be very beneficial for us.
         When you are ready to go just click on the button below.

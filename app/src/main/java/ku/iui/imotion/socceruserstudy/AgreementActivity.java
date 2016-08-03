@@ -16,5 +16,6 @@ public class AgreementActivity extends AppCompatActivity {
     public void fourthStep(View view) {
         Intent intent = new Intent(this,ConnectionStatusActivity.class);
         startActivity(intent);
+        finish();
     }
 }

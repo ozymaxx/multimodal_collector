@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -121,6 +122,7 @@ public class CanvasView extends ImageView {
             out = new DataOutputStream(outToServer);
         } catch (IOException e) {
             Log.e("StationConn",e.getMessage());
+            Toast.makeText(parent.getApplicationContext(),"Network socket initialization error!",Toast.LENGTH_LONG).show();
             outToServer = null;
             client = null;
             out = null;
@@ -166,13 +168,14 @@ public class CanvasView extends ImageView {
         }
     }
 
-    private void sendPointCoords( float x, float y, long timestamp) {
+    private void sendPointCoords( float x, float y, long timestamp, long timem) {
         //new PointSubmissionTask(stationAddr,clientSocket,stationPort,stationIp).execute(x,y,(float) timestamp);
         if (out != null) {
-            new PointSubmissionTask(out).execute(x,y,(float) timestamp);
+            new PointSubmissionTask(out).execute(x,y,(float) timestamp, (float) timem);
         }
         else {
             Log.e("StationConn","Connection problem");
+            Toast.makeText(parent.getApplicationContext(),"Connection problem with the station and peer!",Toast.LENGTH_LONG).show();
         }
     }
 
@@ -183,6 +186,7 @@ public class CanvasView extends ImageView {
         }
         else {
             Log.e("StationConn","Connection problem");
+            Toast.makeText(parent.getApplicationContext(),"Connection problem with the station and peer!",Toast.LENGTH_LONG).show();
         }
     }
 
@@ -192,6 +196,7 @@ public class CanvasView extends ImageView {
         }
         else {
             Log.e("StationConn","Connection problem");
+            Toast.makeText(parent.getApplicationContext(),"Connection problem with the station and peer!",Toast.LENGTH_LONG).show();
         }
     }
 
@@ -202,6 +207,7 @@ public class CanvasView extends ImageView {
             }
         } catch (IOException e) {
             Log.e("StationConn",e.getMessage());
+            Toast.makeText(parent.getApplicationContext(),"Connection problem with the station and peer!",Toast.LENGTH_LONG).show();
         }
     }
 
@@ -216,7 +222,7 @@ public class CanvasView extends ImageView {
             sendStrokeInformation("STRSTART", curStrokeWidth, curr, curg, curb, cura);
 
             sketch.addPoint(x, y);
-            sendPointCoords(x, y, System.nanoTime());
+            sendPointCoords(x, y, System.nanoTime(), System.currentTimeMillis());
         }
         else {
             peerPaths.get(peerPaths.size() - 1).moveTo(x,y);
@@ -237,7 +243,7 @@ public class CanvasView extends ImageView {
 
                 sketch.addPoint(x, y);
 
-                sendPointCoords(x, y, System.nanoTime());
+                sendPointCoords(x, y, System.nanoTime(), System.currentTimeMillis());
             }
         }
         else {
@@ -330,10 +336,6 @@ public class CanvasView extends ImageView {
     }
 
     public void remoteTouchEvent(float x,float y,int type) {
-        //Log.e("Peer","("+x+","+y+")");
-        //Log.e("Peer",peerPaints.size()+"");
-        //Log.e("Peer","("+pa+","+pr+","+pg+","+pb+")");
-
         switch (type) {
             case REMOTE_MOVE:
                 moveTouch(x,y,false);

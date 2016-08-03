@@ -25,9 +25,10 @@ public class PointSubmissionTask extends AsyncTask<Float,Void,Void> {
         float x = floats[0];
         float y = floats[1];
         long timestamp = (long) ((float) floats[2]);
+        long timeMillis = (long) ((float) floats[3]);
 
         try {
-            out.writeChars("("+x+","+y+","+timestamp+")");
+            out.writeChars("("+x+","+y+","+timestamp+","+timeMillis+")");
         } catch (IOException e) {
             Log.e("StationConn",e.getMessage());
         } catch (NullPointerException e) {

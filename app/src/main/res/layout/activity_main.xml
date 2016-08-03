@@ -124,6 +124,7 @@
         android:layout_alignTop="@+id/highlightBrown"
         android:layout_alignParentBottom="true" />
 
+    <!--
     <Button
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
@@ -133,14 +134,26 @@
         android:layout_alignTop="@+id/highlightTitle"
         android:layout_toRightOf="@+id/drawingMode"
         android:layout_toEndOf="@+id/drawingMode"
-        android:onClick="stopRecording" />
+        android:onClick="stopRecording" /> -->
 
     <SurfaceView
         android:layout_width="1px"
         android:layout_height="1px"
         android:id="@+id/surfaceView"
-        android:layout_alignTop="@+id/stopRecording"
-        android:layout_toRightOf="@+id/stopRecording"
-        android:layout_toEndOf="@+id/stopRecording" />
+        android:layout_alignTop="@+id/drawingMode"
+        android:layout_toRightOf="@+id/drawingMode"
+        android:layout_toEndOf="@+id/drawingMode" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/exit"
+        android:id="@+id/button"
+        android:layout_below="@+id/queryCanvas"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:onClick="closeApplication" />
 
 </RelativeLayout>

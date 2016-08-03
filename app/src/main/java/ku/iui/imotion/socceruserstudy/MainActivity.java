@@ -11,6 +11,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.TextureView;
 import android.view.View;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.List;
@@ -90,6 +91,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         } catch (IOException e) {
             stopRecordingHelper();
             Log.e("AudioRecording", "prepare() failed");
+            Toast.makeText(getApplicationContext(),"Sound recorder preparation failed!",Toast.LENGTH_LONG).show();
         }
 
         soundRecorder.start();
@@ -99,6 +101,10 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         soundRecorder.stop();
         soundRecorder.release();
         soundRecorder = null;
+    }
+
+    public void closeApplication(View v) {
+        finish();
     }
 
     public void stopRecording(View v) {
@@ -163,6 +169,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
             mCamera.startPreview();
         } catch (Exception e) {
             Log.e("videorec", "Surface texture is unavailable or unsuitable" + e.getMessage());
+            Toast.makeText(getApplicationContext(),"Video recorder surface is unavailable or unsuitable!",Toast.LENGTH_LONG).show();
         }
 
         // BEGIN_INCLUDE (configure_media_recorder)
@@ -189,9 +196,11 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         } catch (IllegalStateException e) {
             Log.d("videorec", "IllegalStateException preparing MediaRecorder: " + e.getMessage());
             releaseMediaRecorder();
+            Toast.makeText(getApplicationContext(),"Media Recorder preparation error!",Toast.LENGTH_LONG).show();
         } catch (IOException e) {
             Log.d("videorec", "IOException preparing MediaRecorder: " + e.getMessage());
             releaseMediaRecorder();
+            Toast.makeText(getApplicationContext(),"Media Recorder I/0 error!",Toast.LENGTH_LONG).show();
         }
 
         videoRecorder.start();
@@ -216,14 +225,10 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
-        //try {
         if(!mInitSuccesful) {
             new ClearCanvasTask(ConnectionStatusActivity.out).execute("VIDEOOPEN", System.nanoTime(), userID);
             startVideoRecording();
         }
-        //} /*catch (Exception e) {
-            //Log.e("videorec",e.getMessage());
-        //}*/
     }
 
     @Override
@@ -252,9 +257,9 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         try {
             mCamera.setPreviewDisplay(mHolder);
             mCamera.startPreview();
-
         } catch (Exception e){
             Log.d("videorec", "Error starting camera preview: " + e.getMessage());
+            Toast.makeText(getApplicationContext(),"Camera preview initialization error!",Toast.LENGTH_LONG).show();
         }
 
         //mCamera.unlock();
@@ -272,54 +277,4 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         releaseCamera();
         queryCanvas.endConnection();
     }
-
-    /*
-    private void releaseVideoRecorder() {
-        if (videoRecorder != null) {
-            videoRecorder.reset(); // clear recorder configuration
-            videoRecorder.release(); // release the recorder object
-            videoRecorder = null;
-            mCamera.lock(); // lock camera for later use
-        }
-    }
-
-    private void startVideoRecording() {
-        releaseVideoRecorder();
-        int cameraId = findFrontFacingCamera();
-
-        if (cameraId >= 0) {
-            // open the backFacingCamera
-            // set a picture callback
-            // refresh the preview
-            mCamera = Camera.open(cameraId);
-        }
-
-        videoRecorder = new MediaRecorder();
-        mCamera.unlock();
-        videoRecorder.setCamera(mCamera);
-        videoRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        videoRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
-        videoRecorder.setProfile(CamcorderProfile.get(CamcorderProfile.QUALITY_LOW));
-        //videoRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-        //videoRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.MPEG_4_SP);
-        //videoRecorder.setVideoSize(640, 480);
-        //videoRecorder.setVideoFrameRate(15);
-        videoRecorder.setOutputFile(videoFileName);
-        //videoRecorder.setMaxDuration(600000); // set maximum duration
-        //videoRecorder.setMaxFileSize(50000000); // set maximum file size
-
-        try {
-            videoRecorder.prepare();
-        } catch (IllegalStateException e) {
-            releaseVideoRecorder();
-            Log.e("VideoRecording", e.getMessage());
-        } catch (IOException e) {
-            releaseVideoRecorder();
-            Log.e("VideoRecording", e.getMessage());
-        }
-
-        Log.e("videorecord","opened");
-        videoRecorder.start();
-    }
-    */
 }
