@@ -31,17 +31,6 @@
         android:layout_centerHorizontal="true"
         android:clickable="false" />
 
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/server"
-        android:id="@+id/stationCheck"
-        android:textSize="30dp"
-        android:layout_below="@+id/otherTabletCheck"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
-        android:clickable="false" />
-
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

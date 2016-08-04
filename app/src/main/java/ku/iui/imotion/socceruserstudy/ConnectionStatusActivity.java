@@ -34,9 +34,8 @@ public class ConnectionStatusActivity extends AppCompatActivity {
         setContentView(R.layout.activity_connection_status);
         status = false;
         otherTablet = (CheckBox) findViewById(R.id.otherTabletCheck);
-        station = (CheckBox) findViewById(R.id.stationCheck);
 
-        new SocketSubmissionTask(this).execute(STATIONIP,STATIONPORT);
+        new PeerValidationTask(this).execute();
     }
 
     public void bringSocket(Socket resultSocket) {
@@ -47,36 +46,19 @@ public class ConnectionStatusActivity extends AppCompatActivity {
             out = new DataOutputStream(outToServer);
             in = new DataInputStream(client.getInputStream());
 
-            station.setChecked(true);
+            otherTablet.setChecked(true);
 
-            Toast.makeText(getApplicationContext(),"Connected to the station",Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),"Connected to the experimenter",Toast.LENGTH_LONG).show();
 
-            if (station.isChecked()&& otherTablet.isChecked()) {
+            if (otherTablet.isChecked()) {
                 status = true;
             }
-
-            new PeerValidationTask(in,this).execute();
         } catch (Exception e) {
             //Log.e("StationConn",e.getMessage());
             outToServer = null;
             client = null;
             out = null;
             Toast.makeText(getApplicationContext(),"Connection error!",Toast.LENGTH_LONG).show();
-        }
-    }
-
-    public void updatePeerStatus(Boolean result) {
-        otherTablet.setChecked(result);
-
-        if (result) {
-            Toast.makeText(getApplicationContext(),"Connected to the peer",Toast.LENGTH_LONG).show();
-        }
-        else {
-            Toast.makeText(getApplicationContext(),"Peer connection error!",Toast.LENGTH_LONG).show();
-        }
-
-        if (station.isChecked()&& otherTablet.isChecked()) {
-            status = true;
         }
     }
 

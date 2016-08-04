@@ -15,6 +15,7 @@ public class PeerSketchThread extends Thread {
     private static String STROKE_START = "STRSTART";
     private static String CLEAR_CANVAS = "CLEAR";
     private static String STROKE_END = "STREND";
+    private static String VIDEO_OPEN = "VIDEOOPEN";
 
     private DataInputStream in;
     private CanvasView delegatedCanvas;
@@ -70,7 +71,7 @@ public class PeerSketchThread extends Thread {
                         });
                     }
                 }
-                else {
+                else if (!(delims[0].equals(VIDEO_OPEN))) {
                     if (!(delims[0].equals(STROKE_END))) {
                         x = Float.parseFloat(delims[0]);
                         y = Float.parseFloat(delims[1]);

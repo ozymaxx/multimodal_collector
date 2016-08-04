@@ -5,52 +5,44 @@ import android.util.Log;
 
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 /**
  * Created by ozymaxx on 22.07.2016.
  */
 
-public class PeerValidationTask extends AsyncTask<Void,Void,Boolean> {
-    private static String READY = "PEERSREADY";
+public class PeerValidationTask extends AsyncTask<Void,Void,Socket> {
+    final static int PORT = 3440;
 
     private DataInputStream in;
     private ConnectionStatusActivity delegatedActivity;
 
-    public PeerValidationTask(DataInputStream in,ConnectionStatusActivity delegatedActivity) {
-        this.in = in;
+    private ServerSocket serverSocket;
+
+    public PeerValidationTask(ConnectionStatusActivity delegatedActivity) {
         this.delegatedActivity = delegatedActivity;
     }
 
     @Override
-    protected Boolean doInBackground(Void... voids) {
-        String receivedContent = "";
-
+    protected Socket doInBackground(Void... voids) {
         try {
-            char ch = in.readChar();
-            receivedContent += ch;
+            serverSocket = new ServerSocket(PORT);
 
-            while (ch != ')') {
-                ch = in.readChar();
-                receivedContent += ch;
-            }
+            Socket client = serverSocket.accept();
 
-            receivedContent = receivedContent.substring(1,receivedContent.length()-1);
-
-            if (receivedContent.equals(READY)) {
-                return true;
-            }
-            else {
-                return false;
-            }
+            return client;
         } catch (IOException e) {
-            Log.e("PeerConn",e.getMessage());
-            return false;
+            Log.e("ExperimenterConn",e.getMessage());
+            return null;
         }
     }
 
-    protected void onPostExecute(Boolean result) {
-        synchronized (delegatedActivity) {
-            delegatedActivity.updatePeerStatus(result);
+    protected void onPostExecute(Socket result) {
+        if (result != null) {
+            synchronized (delegatedActivity) {
+                delegatedActivity.bringSocket(result);
+            }
         }
     }
 }
