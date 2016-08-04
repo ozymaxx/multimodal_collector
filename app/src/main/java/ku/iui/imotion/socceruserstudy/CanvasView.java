@@ -23,6 +23,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -69,6 +70,7 @@ public class CanvasView extends ImageView {
     private float peerStrokeWidth;
     private int curr,curg,curb,cura;
     private int pr,pg,pb,pa;
+    private PrintWriter sketchStream;
 
     public MainActivity parent;
 
@@ -104,14 +106,17 @@ public class CanvasView extends ImageView {
         out = ConnectionStatusActivity.out;
         in = ConnectionStatusActivity.in;
 
-        new PeerSketchThread(in,this).start();
-
         // DIKKAT
         //new SocketSubmissionTask(this).execute(stationIp,stationPort);
     }
 
     public void setParent(MainActivity activity) {
         this.parent = activity;
+    }
+
+    public void setStreamAndStart(PrintWriter sketchStream) {
+        this.sketchStream = sketchStream;
+        new PeerSketchThread(in,this).start();
     }
 
     public void bringSocket(Socket resultSocket) {
@@ -138,6 +143,15 @@ public class CanvasView extends ImageView {
         mPaint.setStrokeWidth(strokeWidth);
 
         return mPaint;
+    }
+
+    public synchronized void addOwnStream(String receivedContent,boolean self) {
+        if (self) {
+            sketchStream.println("0,"+receivedContent+","+System.nanoTime());
+        }
+        else {
+            sketchStream.println("1,"+receivedContent+","+System.nanoTime());
+        }
     }
 
     // override onSizeChanged
@@ -168,31 +182,11 @@ public class CanvasView extends ImageView {
         }
     }
 
-    private void sendPointCoords( float x, float y, long timestamp, long timem) {
+    private void sendLog( String receivedContent) {
         //new PointSubmissionTask(stationAddr,clientSocket,stationPort,stationIp).execute(x,y,(float) timestamp);
         if (out != null) {
-            new PointSubmissionTask(out).execute(x,y,(float) timestamp, (float) timem);
-        }
-        else {
-            Log.e("StationConn","Connection problem");
-            Toast.makeText(parent.getApplicationContext(),"Connection problem with the station and peer!",Toast.LENGTH_LONG).show();
-        }
-    }
-
-    private void sendStrokeInformation(String str,float width,int r,int g,int b,int a) {
-        //new StrokeInformationSubmissionTask(stationAddr,clientSocket,stationPort,stationIp).execute(str);
-        if (out != null) {
-            new StrokeInformationSubmissionTask(out).execute(str,width,r,g,b,a,System.nanoTime(),System.currentTimeMillis());
-        }
-        else {
-            Log.e("StationConn","Connection problem");
-            Toast.makeText(parent.getApplicationContext(),"Connection problem with the station and peer!",Toast.LENGTH_LONG).show();
-        }
-    }
-
-    private void sendClearDirective(String str) {
-        if (out != null) {
-            new ClearCanvasTask(out).execute(str,System.nanoTime(),System.currentTimeMillis());
+            new LogTask(out).execute(receivedContent);
+            //new PointSubmissionTask(out).execute(x,y,(float) timestamp, (float) timem);
         }
         else {
             Log.e("StationConn","Connection problem");
@@ -219,10 +213,15 @@ public class CanvasView extends ImageView {
             mY = y;
 
             sketch.newStroke();
-            sendStrokeInformation("STRSTART", curStrokeWidth, curr, curg, curb, cura);
+
+            String recc = "STRSTART,"+curStrokeWidth+","+curr+","+curg+","+curb+","+cura;
+            sendLog(recc);
+            addOwnStream(recc,true);
 
             sketch.addPoint(x, y);
-            sendPointCoords(x, y, System.nanoTime(), System.currentTimeMillis());
+            String receivedContent = x+","+y;
+            sendLog(receivedContent);
+            addOwnStream(receivedContent,true);
         }
         else {
             peerPaths.get(peerPaths.size() - 1).moveTo(x,y);
@@ -243,7 +242,9 @@ public class CanvasView extends ImageView {
 
                 sketch.addPoint(x, y);
 
-                sendPointCoords(x, y, System.nanoTime(), System.currentTimeMillis());
+                String receivedContent = x+","+y;
+                sendLog(receivedContent);
+                addOwnStream(receivedContent,true);
             }
         }
         else {
@@ -257,7 +258,7 @@ public class CanvasView extends ImageView {
         }
     }
 
-    public void clearCanvas(boolean self) {
+    public synchronized void clearCanvas(boolean self,String receivedContent) {
         for (Path mPath : mPaths) {
             mPath.reset();
         }
@@ -280,12 +281,16 @@ public class CanvasView extends ImageView {
         peerPaints = new ArrayList<Paint>();
         peerPaints.add(newPaint(WHITE,curStrokeWidth));
 
+        addOwnStream(receivedContent,false);
+
         invalidate();
 
         sketch = new Sketch();
 
         if (self) {
-            sendClearDirective("CLEAR");
+            String rec = "CLEAR";
+            sendLog(rec);
+            addOwnStream(rec,true);
         }
     }
 
@@ -301,7 +306,9 @@ public class CanvasView extends ImageView {
             Paint mPaint = mPaints.get(mPaints.size() - 1);
             mPaints.add(newPaint(mPaint.getColor(), mPaint.getStrokeWidth()));
 
-            sendClearDirective("STREND");
+            String receivedContent = "STREND";
+            sendLog(receivedContent);
+            addOwnStream(receivedContent,true);
         }
         else {
             peerPaths.get(peerPaths.size() - 1).lineTo(pX, pY);
@@ -314,7 +321,7 @@ public class CanvasView extends ImageView {
 
     //override the onTouchEvent
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
+    public synchronized boolean onTouchEvent(MotionEvent event) {
         float x = event.getX();
         float y = event.getY();
 
@@ -335,24 +342,27 @@ public class CanvasView extends ImageView {
         return true;
     }
 
-    public void remoteTouchEvent(float x,float y,int type) {
+    public synchronized void remoteTouchEvent(float x,float y,int type,String receivedContent) {
         switch (type) {
             case REMOTE_MOVE:
+                addOwnStream(receivedContent,false);
                 moveTouch(x,y,false);
                 invalidate();
                 break;
             case REMOTE_START:
+                addOwnStream(receivedContent,false);
                 startTouch(x,y,false);
                 invalidate();
                 break;
             case REMOTE_UP:
+                addOwnStream(receivedContent,false);
                 upTouch(false);
                 invalidate();
                 break;
         }
     }
 
-    public void changeModeAndColor(int color) {
+    public synchronized void changeModeAndColor(int color) {
         Paint mPaint = mPaints.get(mPaints.size() - 1);
 
         switch (color) {
@@ -413,7 +423,7 @@ public class CanvasView extends ImageView {
         }
     }
 
-    public void changePeerColor(int width,int r,int g,int b,int a) {
+    public synchronized void changePeerColor(float width,int r,int g,int b,int a,String receivedContent) {
         Paint pPaint = peerPaints.get(peerPaints.size() - 1);
 
         peerStrokeWidth = width;
@@ -424,5 +434,7 @@ public class CanvasView extends ImageView {
 
         pPaint.setColor(Color.argb(pa,pr,pg,pb));
         pPaint.setStrokeWidth(1f*peerStrokeWidth);
+
+        addOwnStream(receivedContent,false);
     }
 }

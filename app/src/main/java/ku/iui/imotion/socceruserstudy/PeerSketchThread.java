@@ -5,6 +5,7 @@ import android.util.Log;
 import java.io.DataInputStream;
 import java.io.EOFException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.Socket;
 
 /**
@@ -29,8 +30,8 @@ public class PeerSketchThread extends Thread {
     public void run() {
         String receivedContent = "";
         String[] delims;
-        int width,r,g,b,a;
-        float x,y;
+        int r,g,b,a;
+        float x,y,width;
         boolean justStarted = false;
 
         while (true) {
@@ -48,28 +49,18 @@ public class PeerSketchThread extends Thread {
                 delims = receivedContent.split(",");
 
                 if (delims[0].equals(STROKE_START)) {
-                    width = Integer.parseInt(delims[1]);
+                    width = Float.parseFloat(delims[1]);
                     r = Integer.parseInt(delims[2]);
                     g = Integer.parseInt(delims[3]);
                     b = Integer.parseInt(delims[4]);
                     a = Integer.parseInt(delims[5]);
 
-                    synchronized (delegatedCanvas) {
-                        delegatedCanvas.changePeerColor(width,r,g,b,a);
-                        //Log.e("xx","xx");
-                    }
+                    delegatedCanvas.changePeerColor(width,r,g,b,a,receivedContent);
 
                     justStarted = true;
                 }
                 else if (delims[0].equals(CLEAR_CANVAS)) {
-                    synchronized (delegatedCanvas) {
-                        delegatedCanvas.parent.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                delegatedCanvas.clearCanvas(false);
-                            }
-                        });
-                    }
+                    delegatedCanvas.parent.runOnUiThread(new RemoteClear(delegatedCanvas,receivedContent,false));
                 }
                 else if (!(delims[0].equals(VIDEO_OPEN))) {
                     if (!(delims[0].equals(STROKE_END))) {
@@ -78,21 +69,23 @@ public class PeerSketchThread extends Thread {
 
                         synchronized (delegatedCanvas) {
                             if (justStarted) {
-                                delegatedCanvas.parent.runOnUiThread(new RemoteDraw(delegatedCanvas,x,y,CanvasView.REMOTE_START));
+                                delegatedCanvas.parent.runOnUiThread(new RemoteDraw(delegatedCanvas,x,y,CanvasView.REMOTE_START,receivedContent));
                                 justStarted = false;
                             } else {
-                                delegatedCanvas.parent.runOnUiThread(new RemoteDraw(delegatedCanvas,x,y,CanvasView.REMOTE_MOVE));
+                                delegatedCanvas.parent.runOnUiThread(new RemoteDraw(delegatedCanvas,x,y,CanvasView.REMOTE_MOVE,receivedContent));
                             }
                         }
                     }
                     else {
                         synchronized (delegatedCanvas) {
-                            delegatedCanvas.parent.runOnUiThread(new RemoteDraw(delegatedCanvas,0,0,CanvasView.REMOTE_UP));
+                            delegatedCanvas.parent.runOnUiThread(new RemoteDraw(delegatedCanvas,0,0,CanvasView.REMOTE_UP,receivedContent));
                         }
                     }
                 }
+                else {
+                    delegatedCanvas.addOwnStream(receivedContent,false);
+                }
 
-                //Log.e("PeerData", receivedContent);
                 receivedContent = "";
             } catch (EOFException e) {
                 break;

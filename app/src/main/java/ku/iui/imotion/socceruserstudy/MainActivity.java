@@ -13,7 +13,10 @@ import android.view.TextureView;
 import android.view.View;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements SurfaceHolder.Callback {
@@ -30,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     private boolean mInitSuccesful;
     private Camera.Parameters parameters;
     private long userID;
+    private PrintWriter sketchStream;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,11 +51,18 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         //startRecording();
         //startVideoRecording();
 
+        try {
+            sketchStream = new PrintWriter(new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/sketch_stream_" + userID + ".sketch"));
+        } catch (FileNotFoundException e) {
+            Log.e("SketchStream",e.getMessage());
+        }
+
         queryCanvas.setParent(this);
+        queryCanvas.setStreamAndStart(sketchStream);
     }
 
     public void clearCanvas(View v) {
-        queryCanvas.clearCanvas(true);
+        queryCanvas.clearCanvas(true,null);
     }
 
     public void changeColor(View v) {
@@ -104,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     }
 
     public void closeApplication(View v) {
-        finish();
+        finishAffinity();
     }
 
     public void stopRecording(View v) {
@@ -226,7 +237,9 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
         if(!mInitSuccesful) {
-            new ClearCanvasTask(ConnectionStatusActivity.out).execute("VIDEOOPEN", System.nanoTime(), userID);
+            String recc = "VIDEOOPEN";
+            new LogTask(ConnectionStatusActivity.out).execute(recc);
+            queryCanvas.addOwnStream(recc,true);
             startVideoRecording();
         }
     }
@@ -275,6 +288,8 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         super.onStop();
         releaseMediaRecorder();
         releaseCamera();
+        sketchStream.close();
         queryCanvas.endConnection();
     }
 }
+
