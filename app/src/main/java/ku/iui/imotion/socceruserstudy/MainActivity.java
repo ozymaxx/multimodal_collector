@@ -237,7 +237,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
         if(!mInitSuccesful) {
-            String recc = "VIDEOOPEN";
+            String recc = "VIDEOOPEN,"+userID;
             new LogTask(ConnectionStatusActivity.out).execute(recc);
             queryCanvas.addOwnStream(recc,true);
             startVideoRecording();
