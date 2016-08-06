@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Game Retrieval User Study</string>
+    <string name="app_name">IUI Video Experiment - 1</string>
     <string name="clear_canvas">Clear Canvas</string>
     <string name="highlight_title">Highlighting Colors</string>
     <string name="highlight_brown">Brown</string>
@@ -10,7 +10,7 @@
     <string name="drawingmode">Drawing Mode</string>
     <string name="exit">Exit</string>
 
-    <string name="app_name_tr">Oyun Senaryosu Bulup Getirme Çalışması</string>
+    <string name="app_name_tr">IUI Video Deneyi - 1</string>
     <string name="clear_canvas_tr">Temizle</string>
     <string name="highlight_title_tr">Çizim Belirtme Renkleri</string>
     <string name="highlight_brown_tr">K.Rengi</string>
