@@ -281,17 +281,18 @@ public class CanvasView extends ImageView {
         peerPaints = new ArrayList<Paint>();
         peerPaints.add(newPaint(WHITE,curStrokeWidth));
 
-        addOwnStream(receivedContent,false);
-
-        invalidate();
-
-        sketch = new Sketch();
-
         if (self) {
             String rec = "CLEAR";
             sendLog(rec);
             addOwnStream(rec,true);
         }
+        else {
+            addOwnStream(receivedContent,false);
+        }
+
+        invalidate();
+
+        sketch = new Sketch();
     }
 
     // when ACTION_UP stop touch
