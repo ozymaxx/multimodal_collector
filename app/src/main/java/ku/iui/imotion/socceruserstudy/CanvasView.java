@@ -281,6 +281,7 @@ public class CanvasView extends ImageView {
         peerPaints = new ArrayList<Paint>();
         peerPaints.add(newPaint(WHITE,curStrokeWidth));
 
+        // null :)
         if (self) {
             String rec = "CLEAR";
             sendLog(rec);
