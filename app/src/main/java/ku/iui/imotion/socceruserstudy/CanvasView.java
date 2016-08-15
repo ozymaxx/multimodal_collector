@@ -16,6 +16,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -329,14 +330,17 @@ public class CanvasView extends ImageView {
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                MainActivity.clearButton.setEnabled(false);
                 startTouch(x, y, true);
                 invalidate();
                 break;
             case MotionEvent.ACTION_MOVE:
+                MainActivity.clearButton.setEnabled(false);
                 moveTouch(x, y, true);
                 invalidate();
                 break;
             case MotionEvent.ACTION_UP:
+                MainActivity.clearButton.setEnabled(true);
                 upTouch(true);
                 invalidate();
                 break;
@@ -347,16 +351,19 @@ public class CanvasView extends ImageView {
     public synchronized void remoteTouchEvent(float x,float y,int type,String receivedContent) {
         switch (type) {
             case REMOTE_MOVE:
+                MainActivity.clearButton.setEnabled(false);
                 addOwnStream(receivedContent,false);
                 moveTouch(x,y,false);
                 invalidate();
                 break;
             case REMOTE_START:
+                MainActivity.clearButton.setEnabled(false);
                 addOwnStream(receivedContent,false);
                 startTouch(x,y,false);
                 invalidate();
                 break;
             case REMOTE_UP:
+                MainActivity.clearButton.setEnabled(true);
                 addOwnStream(receivedContent,false);
                 upTouch(false);
                 invalidate();

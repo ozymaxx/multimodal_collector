@@ -11,6 +11,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.TextureView;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import java.io.File;
@@ -35,6 +36,8 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     private long userID;
     private PrintWriter sketchStream;
 
+    public static Button clearButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         mInitSuccesful = false;
         //startRecording();
         //startVideoRecording();
+        clearButton = (Button) findViewById(R.id.clearButton);
 
         try {
             sketchStream = new PrintWriter(new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/sketch_stream_" + userID + ".sketch"));
@@ -72,9 +76,9 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
             case R.id.highlightBlue:
                 queryCanvas.changeModeAndColor(3);
                 break;
-            case R.id.highlightPurple:
+            /*case R.id.highlightPurple:
                 queryCanvas.changeModeAndColor(4);
-                break;
+                break;*/
             case R.id.highlightRed:
                 queryCanvas.changeModeAndColor(1);
                 break;

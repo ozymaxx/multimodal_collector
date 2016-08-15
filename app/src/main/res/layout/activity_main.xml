@@ -83,6 +83,7 @@
         android:layout_alignTop="@+id/highlightYellow"
         android:layout_alignParentBottom="true" />
 
+    <!--
     <Button
         style="?android:attr/buttonStyleSmall"
         android:layout_width="40dp"
@@ -95,20 +96,20 @@
         android:textColor="#ffffff"
         android:onClick="changeColor"
         android:layout_alignTop="@+id/highlightBlue"
-        android:layout_alignParentBottom="true" />
+        android:layout_alignParentBottom="true" /> -->
 
     <Button
         style="?android:attr/buttonStyleSmall"
         android:layout_width="40dp"
         android:layout_height="wrap_content"
         android:id="@+id/highlightBrown"
-        android:layout_toRightOf="@+id/highlightPurple"
-        android:layout_toEndOf="@+id/highlightPurple"
+        android:layout_toRightOf="@+id/highlightBlue"
+        android:layout_toEndOf="@+id/highlightBlue"
         android:layout_marginLeft="10dp"
         android:background="#700606"
         android:textColor="#ffffff"
         android:onClick="changeColor"
-        android:layout_alignTop="@+id/highlightPurple"
+        android:layout_alignTop="@+id/highlightBlue"
         android:layout_alignParentBottom="true" />
 
     <Button
