@@ -48,7 +48,7 @@ public class ConnectionStatusActivity extends AppCompatActivity {
 
             otherTablet.setChecked(true);
 
-            Toast.makeText(getApplicationContext(),"Connected to the experimenter",Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),"Deneyi yapan kişiye bağlanıldı",Toast.LENGTH_SHORT).show();
 
             if (otherTablet.isChecked()) {
                 status = true;
@@ -58,7 +58,7 @@ public class ConnectionStatusActivity extends AppCompatActivity {
             outToServer = null;
             client = null;
             out = null;
-            Toast.makeText(getApplicationContext(),"Connection error!",Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),"Bağlantı hatası!",Toast.LENGTH_LONG).show();
         }
     }
 
@@ -69,7 +69,7 @@ public class ConnectionStatusActivity extends AppCompatActivity {
             finish();
         }
         else {
-            Toast.makeText(getApplicationContext(),"The tablet must connect to the station!",Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),"Diğer tablete bağlantı gerçekleştirilmeden kayda geçilemez!",Toast.LENGTH_LONG).show();
         }
     }
 }

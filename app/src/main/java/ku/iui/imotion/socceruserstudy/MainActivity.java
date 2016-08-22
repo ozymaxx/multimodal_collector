@@ -154,7 +154,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         int cameraId = findFrontFacingCamera();
 
         if (cameraId >= 0) {
-            // open the backFacingCamera
+            // open the frontFacingCamera
             // set a picture callback
             // refresh the preview
             mCamera = Camera.open(cameraId);
@@ -170,11 +170,13 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         //List<Camera.Size> mSupportedVideoSizes = parameters.getSupportedVideoSizes();
 
         // Use the same size for recording profile.
-        CamcorderProfile profile = CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH);
+        CamcorderProfile profile = CamcorderProfile.get(CamcorderProfile.QUALITY_480P);
 
         // likewise for the camera object itself.
-        parameters.setPreviewSize(profile.videoFrameWidth, profile.videoFrameHeight);
+        //parameters.setPreviewSize(profile.videoFrameWidth, profile.videoFrameHeight);
+        //parameters.setPreviewSize(320, 240);
         parameters.setPictureSize(profile.videoFrameWidth, profile.videoFrameHeight);
+        //parameters.setPictureSize(320, 240);
         mCamera.setParameters(parameters);
 
         try {
@@ -266,7 +268,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
         // set preview size and make any resize, rotate or
         // reformatting changes here
-        CamcorderProfile profile = CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH);
+        CamcorderProfile profile = CamcorderProfile.get(CamcorderProfile.QUALITY_480P);
         parameters.setPictureSize(profile.videoFrameWidth, profile.videoFrameHeight);
         mCamera.setParameters(parameters);
 
