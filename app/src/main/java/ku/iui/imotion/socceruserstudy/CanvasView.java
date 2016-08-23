@@ -293,6 +293,7 @@ public class CanvasView extends ImageView {
         }
 
         invalidate();
+        Toast.makeText(parent.getApplicationContext(),"Çizim alanı temizlendi",Toast.LENGTH_SHORT).show();
 
         sketch = new Sketch();
     }

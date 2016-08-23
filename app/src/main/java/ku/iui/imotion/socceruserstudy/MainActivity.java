@@ -75,21 +75,26 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         switch (vid) {
             case R.id.highlightBlue:
                 queryCanvas.changeModeAndColor(3);
+                Toast.makeText(getApplicationContext(),"Mavi belirteç",Toast.LENGTH_SHORT).show();
                 break;
             /*case R.id.highlightPurple:
                 queryCanvas.changeModeAndColor(4);
                 break;*/
             case R.id.highlightRed:
                 queryCanvas.changeModeAndColor(1);
+                Toast.makeText(getApplicationContext(),"Kırmızı belirteç",Toast.LENGTH_SHORT).show();
                 break;
             case R.id.highlightYellow:
                 queryCanvas.changeModeAndColor(2);
+                Toast.makeText(getApplicationContext(),"Sarı belirteç",Toast.LENGTH_SHORT).show();
                 break;
             case R.id.highlightBrown:
                 queryCanvas.changeModeAndColor(5);
+                Toast.makeText(getApplicationContext(),"Kahverengi belirteç",Toast.LENGTH_SHORT).show();
                 break;
             case R.id.drawingMode:
                 queryCanvas.changeModeAndColor(6);
+                Toast.makeText(getApplicationContext(),"Çizim modu",Toast.LENGTH_SHORT).show();
                 break;
         }
     }
