@@ -32,6 +32,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import static android.graphics.Color.BLACK;
 import static android.graphics.Color.BLUE;
@@ -72,6 +73,8 @@ public class CanvasView extends ImageView {
     private int curr,curg,curb,cura;
     private int pr,pg,pb,pa;
     private PrintWriter sketchStream;
+    private ArrayList<Boolean> strokeTurns;
+    private Paint curmPaint,curpPaint;
 
     public MainActivity parent;
 
@@ -86,19 +89,24 @@ public class CanvasView extends ImageView {
 
         peerPaths = new ArrayList<Path>();
         peerPaints = new ArrayList<Paint>();
+        strokeTurns = new ArrayList<Boolean>();
 
         // we set a new Path
-        Path mPath = new Path();
-        mPaths.add(mPath);
+        //Path mPath = new Path();
+        //mPaths.add(mPath);
+        //strokeTurns.add(true);
 
-        Path pPath = new Path();
-        peerPaths.add(pPath);
+        //Path pPath = new Path();
+        //peerPaths.add(pPath);
+        //strokeTurns.add(false);
 
         // and we set a new Paint with the desired attributes
         curStrokeWidth = THINNER;
         cura = 255;curr = 255;curg = 255;curb = 255;
-        mPaints.add(newPaint(WHITE,curStrokeWidth));
-        peerPaints.add(newPaint(WHITE,curStrokeWidth));
+        curmPaint = newPaint(WHITE,curStrokeWidth);
+        curpPaint = newPaint(WHITE,curStrokeWidth);
+        //mPaints.add(newPaint(WHITE,curStrokeWidth));
+        //peerPaints.add(newPaint(WHITE,curStrokeWidth));
 
         sketch = new Sketch();
 
@@ -169,17 +177,20 @@ public class CanvasView extends ImageView {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        // draw the mPath with the mPaint on the canvas when onDraw
 
-        // many strokes
-        for (int i = 0; i < mPaths.size(); i++) {
-            canvas.drawPath(mPaths.get(i), mPaints.get(i));
-        }
+        Iterator<Path> mPathIter = mPaths.iterator();
+        Iterator<Paint> mPaintIter = mPaints.iterator();
 
-        // peer sketch
-        for (int i = 0; i < peerPaths.size(); i++) {
-            canvas.drawPath(peerPaths.get(i), peerPaints.get(i));
-            //Log.e("PeerDebug",""+i);
+        Iterator<Path> pPathIter = peerPaths.iterator();
+        Iterator<Paint> pPaintIter = peerPaints.iterator();
+
+        for (int i = 0; i < strokeTurns.size(); i++) {
+            if (strokeTurns.get(i)) { // stroke of self
+                canvas.drawPath(mPathIter.next(),mPaintIter.next());
+            }
+            else {
+                canvas.drawPath(pPathIter.next(),pPaintIter.next());
+            }
         }
     }
 
@@ -209,6 +220,11 @@ public class CanvasView extends ImageView {
     // when ACTION_DOWN start touch according to the x,y values
     public void startTouch(float x, float y, boolean self) {
         if (self) {
+            mPaths.add(new Path());
+            strokeTurns.add(true);
+
+            mPaints.add(curmPaint);
+
             mPaths.get(mPaths.size() - 1).moveTo(x, y);
             mX = x;
             mY = y;
@@ -225,6 +241,11 @@ public class CanvasView extends ImageView {
             addOwnStream(receivedContent,true);
         }
         else {
+            peerPaths.add(new Path());
+            strokeTurns.add(false);
+
+            peerPaints.add(curpPaint);
+
             peerPaths.get(peerPaths.size() - 1).moveTo(x,y);
             pX = x;
             pY = y;
@@ -268,27 +289,29 @@ public class CanvasView extends ImageView {
             pPath.reset();
         }
 
+        strokeTurns = new ArrayList<Boolean>();
+
         mPaths = new ArrayList<Path>();
-        mPaths.add(new Path());
+        //mPaths.add(new Path());
+        //strokeTurns.add(true);
 
         mPaints = new ArrayList<Paint>();
-        curStrokeWidth = THINNER;
-        curr = 255;curg = 255;curb = 255;cura = 255;
-        mPaints.add(newPaint(WHITE,curStrokeWidth));
+        //curStrokeWidth = THINNER;
+        //curr = 255;curg = 255;curb = 255;cura = 255;
+        //mPaints.add(newPaint(WHITE,curStrokeWidth));
 
         peerPaths = new ArrayList<Path>();
-        peerPaths.add(new Path());
+        //peerPaths.add(new Path());
+        //strokeTurns.add(false);
 
         peerPaints = new ArrayList<Paint>();
-        peerPaints.add(newPaint(WHITE,curStrokeWidth));
+        //peerPaints.add(newPaint(WHITE,curStrokeWidth));
 
-        // null :)
         if (self) {
             String rec = "CLEAR";
             sendLog(rec);
             addOwnStream(rec,true);
-        }
-        else {
+        } else {
             addOwnStream(receivedContent,false);
         }
 
@@ -305,10 +328,11 @@ public class CanvasView extends ImageView {
 
             sketch.addPoint(mX, mY);
 
-            mPaths.add(new Path());
+            //mPaths.add(new Path());
+            //strokeTurns.add(true);
 
-            Paint mPaint = mPaints.get(mPaints.size() - 1);
-            mPaints.add(newPaint(mPaint.getColor(), mPaint.getStrokeWidth()));
+            //Paint mPaint = mPaints.get(mPaints.size() - 1);
+            //mPaints.add(newPaint(mPaint.getColor(), mPaint.getStrokeWidth()));
 
             String receivedContent = "STREND";
             sendLog(receivedContent);
@@ -316,10 +340,11 @@ public class CanvasView extends ImageView {
         }
         else {
             peerPaths.get(peerPaths.size() - 1).lineTo(pX, pY);
-            peerPaths.add(new Path());
+            //peerPaths.add(new Path());
+            //strokeTurns.add(false);
 
-            Paint pPaint = peerPaints.get(peerPaints.size() - 1);
-            peerPaints.add(newPaint(pPaint.getColor(), pPaint.getStrokeWidth()));
+            //Paint pPaint = peerPaints.get(peerPaints.size() - 1);
+            //peerPaints.add(newPaint(pPaint.getColor(), pPaint.getStrokeWidth()));
         }
     }
 
@@ -373,7 +398,7 @@ public class CanvasView extends ImageView {
     }
 
     public synchronized void changeModeAndColor(int color) {
-        Paint mPaint = mPaints.get(mPaints.size() - 1);
+        //Paint mPaint = mPaints.get(mPaints.size() - 1);
 
         switch (color) {
             case 1:
@@ -381,60 +406,54 @@ public class CanvasView extends ImageView {
                 curr = 0xcc;
                 curg = 0;
                 curb = 0;
-                mPaint.setColor(Color.argb(cura, curr, curg, curb));
                 curStrokeWidth = THICKER;
-                mPaint.setStrokeWidth(curStrokeWidth);
+                curmPaint = newPaint(Color.argb(cura, curr, curg, curb),curStrokeWidth);
                 break;
             case 2:
                 cura = 150;
                 curr = 0xff;
                 curg = 0xff;
                 curb = 0;
-                mPaint.setColor(Color.argb(cura, curr, curg, curb));
                 curStrokeWidth = THICKER;
-                mPaint.setStrokeWidth(curStrokeWidth);
+                curmPaint = newPaint(Color.argb(cura, curr, curg, curb),curStrokeWidth);
                 break;
             case 3:
                 cura = 150;
                 curr = 0;
                 curg = 0x99;
                 curb = 0xcc;
-                mPaint.setColor(Color.argb(cura, curr, curg, curb));
                 curStrokeWidth = THICKER;
-                mPaint.setStrokeWidth(curStrokeWidth);
+                curmPaint = newPaint(Color.argb(cura, curr, curg, curb),curStrokeWidth);
                 break;
             case 4:
                 cura = 150;
                 curr = 0xaa;
                 curg = 0x66;
                 curb = 0xcc;
-                mPaint.setColor(Color.argb(cura, curr, curg, curb));
                 curStrokeWidth = THICKER;
-                mPaint.setStrokeWidth(curStrokeWidth);
+                curmPaint = newPaint(Color.argb(cura, curr, curg, curb),curStrokeWidth);
                 break;
             case 5:
                 cura = 150;
                 curr = 0x70;
                 curg = 0x06;
                 curb = 0x06;
-                mPaint.setColor(Color.argb(cura, curr, curg, curb));
                 curStrokeWidth = THICKER;
-                mPaint.setStrokeWidth(curStrokeWidth);
+                curmPaint = newPaint(Color.argb(cura, curr, curg, curb),curStrokeWidth);
                 break;
             case 6:
                 cura = 255;
                 curr = 255;
                 curg = 255;
                 curb = 255;
-                mPaint.setColor(WHITE);
                 curStrokeWidth = THINNER;
-                mPaint.setStrokeWidth(curStrokeWidth);
+                curmPaint = newPaint(WHITE,curStrokeWidth);
                 break;
         }
     }
 
     public synchronized void changePeerColor(float width,int r,int g,int b,int a,String receivedContent) {
-        Paint pPaint = peerPaints.get(peerPaints.size() - 1);
+        //Paint pPaint = peerPaints.get(peerPaints.size() - 1);
 
         peerStrokeWidth = width;
         pr = r;
@@ -442,8 +461,7 @@ public class CanvasView extends ImageView {
         pb = b;
         pa = a;
 
-        pPaint.setColor(Color.argb(pa,pr,pg,pb));
-        pPaint.setStrokeWidth(1f*peerStrokeWidth);
+        curpPaint = newPaint(Color.argb(pa,pr,pg,pb),1f*peerStrokeWidth);
 
         addOwnStream(receivedContent,false);
     }
