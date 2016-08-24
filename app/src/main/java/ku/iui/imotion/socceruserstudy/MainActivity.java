@@ -96,6 +96,10 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
                 queryCanvas.changeModeAndColor(6);
                 Toast.makeText(getApplicationContext(),"Çizim modu",Toast.LENGTH_SHORT).show();
                 break;
+            case R.id.eraserMode:
+                queryCanvas.changeModeAndColor(7);
+                Toast.makeText(getApplicationContext(),"Silgi modu",Toast.LENGTH_SHORT).show();
+                break;
         }
     }
 

@@ -12,6 +12,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -37,6 +39,7 @@ import java.util.Iterator;
 import static android.graphics.Color.BLACK;
 import static android.graphics.Color.BLUE;
 import static android.graphics.Color.RED;
+import static android.graphics.Color.TRANSPARENT;
 import static android.graphics.Color.WHITE;
 import static android.graphics.Color.YELLOW;
 
@@ -50,7 +53,10 @@ public class CanvasView extends ImageView {
     //final static String stationIp = "212.175.32.131";
     final static int stationPort = 3440;
     final static float THINNER = 4f;
-    final static float THICKER = 8f;
+    final static float THICKER = 20f;
+    final static float ERASER = 30f;
+    final static int AREAWIDTH = 1140;
+    final static int AREAHEIGHT = 650;
 
     public int width;
     public int height;
@@ -75,6 +81,7 @@ public class CanvasView extends ImageView {
     private PrintWriter sketchStream;
     private ArrayList<Boolean> strokeTurns;
     private Paint curmPaint,curpPaint;
+    private boolean eraserMode;
 
     public MainActivity parent;
 
@@ -83,6 +90,8 @@ public class CanvasView extends ImageView {
     public CanvasView(Context c, AttributeSet attrs) {
         super(c, attrs);
         context = c;
+
+        eraserMode = false;
 
         mPaths = new ArrayList<Path>();
         mPaints = new ArrayList<Paint>();
@@ -114,6 +123,9 @@ public class CanvasView extends ImageView {
         outToServer = ConnectionStatusActivity.outToServer;
         out = ConnectionStatusActivity.out;
         in = ConnectionStatusActivity.in;
+
+        mBitmap = Bitmap.createBitmap(AREAWIDTH,AREAHEIGHT, Bitmap.Config.ARGB_8888);
+        mCanvas = new Canvas(mBitmap);
 
         // DIKKAT
         //new SocketSubmissionTask(this).execute(stationIp,stationPort);
@@ -186,12 +198,14 @@ public class CanvasView extends ImageView {
 
         for (int i = 0; i < strokeTurns.size(); i++) {
             if (strokeTurns.get(i)) { // stroke of self
-                canvas.drawPath(mPathIter.next(),mPaintIter.next());
+                mCanvas.drawPath(mPathIter.next(),mPaintIter.next());
             }
             else {
-                canvas.drawPath(pPathIter.next(),pPaintIter.next());
+                mCanvas.drawPath(pPathIter.next(),pPaintIter.next());
             }
         }
+
+        canvas.drawBitmap(mBitmap,0,0,null);
     }
 
     private void sendLog( String receivedContent) {
@@ -231,7 +245,7 @@ public class CanvasView extends ImageView {
 
             sketch.newStroke();
 
-            String recc = "STRSTART,"+curStrokeWidth+","+curr+","+curg+","+curb+","+cura;
+            String recc = "STRSTART,"+curStrokeWidth+","+curr+","+curg+","+curb+","+cura+","+eraserMode;
             sendLog(recc);
             addOwnStream(recc,true);
 
@@ -315,6 +329,8 @@ public class CanvasView extends ImageView {
             addOwnStream(receivedContent,false);
         }
 
+        mBitmap = Bitmap.createBitmap(AREAWIDTH,AREAHEIGHT, Bitmap.Config.ARGB_8888);
+        mCanvas = new Canvas(mBitmap);
         invalidate();
         Toast.makeText(parent.getApplicationContext(),"Çizim alanı temizlendi",Toast.LENGTH_SHORT).show();
 
@@ -408,6 +424,8 @@ public class CanvasView extends ImageView {
                 curb = 0;
                 curStrokeWidth = THICKER;
                 curmPaint = newPaint(Color.argb(cura, curr, curg, curb),curStrokeWidth);
+                curmPaint.setXfermode(null);
+                eraserMode = false;
                 break;
             case 2:
                 cura = 150;
@@ -416,6 +434,8 @@ public class CanvasView extends ImageView {
                 curb = 0;
                 curStrokeWidth = THICKER;
                 curmPaint = newPaint(Color.argb(cura, curr, curg, curb),curStrokeWidth);
+                curmPaint.setXfermode(null);
+                eraserMode = false;
                 break;
             case 3:
                 cura = 150;
@@ -424,6 +444,8 @@ public class CanvasView extends ImageView {
                 curb = 0xcc;
                 curStrokeWidth = THICKER;
                 curmPaint = newPaint(Color.argb(cura, curr, curg, curb),curStrokeWidth);
+                curmPaint.setXfermode(null);
+                eraserMode = false;
                 break;
             case 4:
                 cura = 150;
@@ -432,6 +454,8 @@ public class CanvasView extends ImageView {
                 curb = 0xcc;
                 curStrokeWidth = THICKER;
                 curmPaint = newPaint(Color.argb(cura, curr, curg, curb),curStrokeWidth);
+                curmPaint.setXfermode(null);
+                eraserMode = false;
                 break;
             case 5:
                 cura = 150;
@@ -440,6 +464,8 @@ public class CanvasView extends ImageView {
                 curb = 0x06;
                 curStrokeWidth = THICKER;
                 curmPaint = newPaint(Color.argb(cura, curr, curg, curb),curStrokeWidth);
+                curmPaint.setXfermode(null);
+                eraserMode = false;
                 break;
             case 6:
                 cura = 255;
@@ -448,11 +474,23 @@ public class CanvasView extends ImageView {
                 curb = 255;
                 curStrokeWidth = THINNER;
                 curmPaint = newPaint(WHITE,curStrokeWidth);
+                curmPaint.setXfermode(null);
+                eraserMode = false;
+                break;
+            case 7:
+                cura = 255;
+                curr = 0;
+                curg = 0;
+                curb = 0;
+                curStrokeWidth = ERASER;
+                curmPaint = newPaint(TRANSPARENT,curStrokeWidth);
+                curmPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+                eraserMode = true;
                 break;
         }
     }
 
-    public synchronized void changePeerColor(float width,int r,int g,int b,int a,String receivedContent) {
+    public synchronized void changePeerColor(float width,int r,int g,int b,int a,boolean eraser,String receivedContent) {
         //Paint pPaint = peerPaints.get(peerPaints.size() - 1);
 
         peerStrokeWidth = width;
@@ -462,6 +500,13 @@ public class CanvasView extends ImageView {
         pa = a;
 
         curpPaint = newPaint(Color.argb(pa,pr,pg,pb),1f*peerStrokeWidth);
+
+        if (eraser) {
+            curpPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+        }
+        else {
+            curpPaint.setXfermode(null);
+        }
 
         addOwnStream(receivedContent,false);
     }

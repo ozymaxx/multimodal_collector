@@ -141,9 +141,9 @@
         android:layout_width="1px"
         android:layout_height="1px"
         android:id="@+id/surfaceView"
-        android:layout_alignTop="@+id/drawingMode"
-        android:layout_toRightOf="@+id/drawingMode"
-        android:layout_toEndOf="@+id/drawingMode" />
+        android:layout_alignTop="@+id/eraserMode"
+        android:layout_toRightOf="@+id/eraserMode"
+        android:layout_toEndOf="@id/eraserMode" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -156,5 +156,17 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:onClick="closeApplication" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:id="@+id/eraserMode"
+        android:layout_alignTop="@+id/drawingMode"
+        android:layout_toRightOf="@+id/drawingMode"
+        android:layout_toEndOf="@+id/drawingMode"
+        android:background="@drawable/erasericon"
+        android:onClick="changeColor" />
 
 </RelativeLayout>

@@ -31,6 +31,7 @@ public class PeerSketchThread extends Thread {
         String receivedContent = "";
         String[] delims;
         int r,g,b,a;
+        boolean erase;
         float x,y,width;
         boolean justStarted = false;
 
@@ -54,8 +55,9 @@ public class PeerSketchThread extends Thread {
                     g = Integer.parseInt(delims[3]);
                     b = Integer.parseInt(delims[4]);
                     a = Integer.parseInt(delims[5]);
+                    erase = Boolean.parseBoolean(delims[6]);
 
-                    delegatedCanvas.changePeerColor(width,r,g,b,a,receivedContent);
+                    delegatedCanvas.changePeerColor(width,r,g,b,a,erase,receivedContent);
 
                     justStarted = true;
                 }
