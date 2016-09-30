@@ -82,6 +82,8 @@ public class CanvasView extends ImageView {
     private ArrayList<Boolean> strokeTurns;
     private Paint curmPaint,curpPaint;
     private boolean eraserMode;
+    private float hoverX,hoverY;
+    private boolean remoteHovered;
 
     public MainActivity parent;
 
@@ -126,6 +128,8 @@ public class CanvasView extends ImageView {
 
         mBitmap = Bitmap.createBitmap(AREAWIDTH,AREAHEIGHT, Bitmap.Config.ARGB_8888);
         mCanvas = new Canvas(mBitmap);
+
+        remoteHovered = false;
 
         // DIKKAT
         //new SocketSubmissionTask(this).execute(stationIp,stationPort);
@@ -190,6 +194,9 @@ public class CanvasView extends ImageView {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
+        mBitmap = Bitmap.createBitmap(AREAWIDTH, AREAHEIGHT, Bitmap.Config.ARGB_8888);
+        mCanvas.setBitmap(mBitmap);
+
         Iterator<Path> mPathIter = mPaths.iterator();
         Iterator<Paint> mPaintIter = mPaints.iterator();
 
@@ -203,6 +210,11 @@ public class CanvasView extends ImageView {
             else {
                 mCanvas.drawPath(pPathIter.next(),pPaintIter.next());
             }
+        }
+
+        if (remoteHovered) {
+            mCanvas.drawLine(hoverX-10,hoverY-10,hoverX+10,hoverY+10,newPaint(Color.RED,8));
+            mCanvas.drawLine(hoverX+10,hoverY-10,hoverX-10,hoverY+10,newPaint(Color.RED,8));
         }
 
         canvas.drawBitmap(mBitmap,0,0,null);
@@ -362,6 +374,53 @@ public class CanvasView extends ImageView {
             //Paint pPaint = peerPaints.get(peerPaints.size() - 1);
             //peerPaints.add(newPaint(pPaint.getColor(), pPaint.getStrokeWidth()));
         }
+    }
+
+    @Override
+    public boolean onHoverEvent(MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_HOVER_ENTER:
+                changeHover(true);
+                break;
+            case MotionEvent.ACTION_HOVER_EXIT:
+                changeHover(false);
+                break;
+            case MotionEvent.ACTION_HOVER_MOVE:
+                String recc = "HOVER,"+event.getX()+","+event.getY();
+                sendLog(recc);
+                addOwnStream(recc,true);
+                break;
+        }
+
+        return true;
+    }
+
+    public void setRemoteHovered(boolean state, String receivedContent) {
+        remoteHovered = state;
+        addOwnStream(receivedContent,false);
+    }
+
+    public void changeHover(boolean hovered) {
+        String recc;
+
+        if (hovered) {
+            recc = "STARTHOVER";
+        }
+        else {
+            recc = "ENDHOVER";
+        }
+
+        sendLog(recc);
+        addOwnStream(recc,true);
+    }
+
+    public void hoverRemote(float x, float y, String receivedContent) {
+        hoverX = x;
+        hoverY = y;
+
+        invalidate();
+
+        addOwnStream(receivedContent,false);
     }
 
     //override the onTouchEvent

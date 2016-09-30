@@ -17,6 +17,9 @@ public class PeerSketchThread extends Thread {
     private static String CLEAR_CANVAS = "CLEAR";
     private static String STROKE_END = "STREND";
     private static String VIDEO_OPEN = "VIDEOOPEN";
+    private static String HOVER = "HOVER";
+    private static String START_HOVER = "STARTHOVER";
+    private static String END_HOVER = "ENDHOVER";
 
     private DataInputStream in;
     private CanvasView delegatedCanvas;
@@ -63,6 +66,24 @@ public class PeerSketchThread extends Thread {
                 }
                 else if (delims[0].equals(CLEAR_CANVAS)) {
                     delegatedCanvas.parent.runOnUiThread(new RemoteClear(delegatedCanvas,receivedContent,false));
+                }
+                else if (delims[0].equals(HOVER)) {
+                    x = Float.parseFloat(delims[1]);
+                    y = Float.parseFloat(delims[2]);
+
+                    synchronized (delegatedCanvas) {
+                        delegatedCanvas.parent.runOnUiThread(new RemoteHover(delegatedCanvas,x,y,receivedContent));
+                    }
+                }
+                else if (delims[0].equals(START_HOVER)) {
+                    synchronized (delegatedCanvas) {
+                        delegatedCanvas.parent.runOnUiThread(new RemoteHoverStateChange(delegatedCanvas,true,receivedContent));
+                    }
+                }
+                else if (delims[0].equals(END_HOVER)) {
+                    synchronized (delegatedCanvas) {
+                        delegatedCanvas.parent.runOnUiThread(new RemoteHoverStateChange(delegatedCanvas,false,receivedContent));
+                    }
                 }
                 else if (!(delims[0].equals(VIDEO_OPEN))) {
                     if (!(delims[0].equals(STROKE_END))) {
