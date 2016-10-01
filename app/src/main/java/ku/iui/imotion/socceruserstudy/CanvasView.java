@@ -390,6 +390,9 @@ public class CanvasView extends ImageView {
                 sendLog(recc);
                 addOwnStream(recc,true);
                 break;
+            default:
+                changeHover(false);
+                break;
         }
 
         return true;
@@ -398,6 +401,7 @@ public class CanvasView extends ImageView {
     public void setRemoteHovered(boolean state, String receivedContent) {
         remoteHovered = state;
         addOwnStream(receivedContent,false);
+        invalidate();
     }
 
     public void changeHover(boolean hovered) {
