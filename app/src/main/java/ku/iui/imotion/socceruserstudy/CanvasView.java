@@ -194,8 +194,8 @@ public class CanvasView extends ImageView {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        mBitmap = Bitmap.createBitmap(AREAWIDTH, AREAHEIGHT, Bitmap.Config.ARGB_8888);
-        mCanvas.setBitmap(mBitmap);
+        //mBitmap = Bitmap.createBitmap(AREAWIDTH, AREAHEIGHT, Bitmap.Config.ARGB_8888);
+        //mCanvas.setBitmap(mBitmap);
 
         Iterator<Path> mPathIter = mPaths.iterator();
         Iterator<Paint> mPaintIter = mPaints.iterator();
@@ -212,12 +212,14 @@ public class CanvasView extends ImageView {
             }
         }
 
-        if (remoteHovered) {
-            mCanvas.drawLine(hoverX-10,hoverY-10,hoverX+10,hoverY+10,newPaint(Color.RED,8));
-            mCanvas.drawLine(hoverX+10,hoverY-10,hoverX-10,hoverY+10,newPaint(Color.RED,8));
-        }
-
         canvas.drawBitmap(mBitmap,0,0,null);
+
+        if (remoteHovered) {
+            //mCanvas.drawLine(hoverX-10,hoverY-10,hoverX+10,hoverY+10,newPaint(Color.RED,8));
+            canvas.drawLine(hoverX-10,hoverY-10,hoverX+10,hoverY+10,newPaint(Color.RED,8));
+            //mCanvas.drawLine(hoverX+10,hoverY-10,hoverX-10,hoverY+10,newPaint(Color.RED,8));
+            canvas.drawLine(hoverX+10,hoverY-10,hoverX-10,hoverY+10,newPaint(Color.RED,8));
+        }
     }
 
     private void sendLog( String receivedContent) {
