@@ -216,9 +216,9 @@ public class CanvasView extends ImageView {
 
         if (remoteHovered) {
             //mCanvas.drawLine(hoverX-10,hoverY-10,hoverX+10,hoverY+10,newPaint(Color.RED,8));
-            canvas.drawLine(hoverX-10,hoverY-10,hoverX+10,hoverY+10,newPaint(Color.RED,8));
+            canvas.drawLine(hoverX-10,hoverY-10,hoverX+10,hoverY+10,newPaint(Color.BLACK,8));
             //mCanvas.drawLine(hoverX+10,hoverY-10,hoverX-10,hoverY+10,newPaint(Color.RED,8));
-            canvas.drawLine(hoverX+10,hoverY-10,hoverX-10,hoverY+10,newPaint(Color.RED,8));
+            canvas.drawLine(hoverX+10,hoverY-10,hoverX-10,hoverY+10,newPaint(Color.BLACK,8));
         }
     }
 
