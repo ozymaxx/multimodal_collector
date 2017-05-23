@@ -50,7 +50,6 @@ public class CanvasView extends ImageView {
     final static int REMOTE_UP = 3;
 
     final static String stationIp = "";
-    //final static String stationIp = "212.175.32.131";
     final static int stationPort = 3440;
     final static float THINNER = 4f;
     final static float THICKER = 20f;
