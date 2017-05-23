@@ -23,5 +23,5 @@ Since there is not any available APK, you should install it manually through the
 * If you want to clean the shared canvas, press red X button. You can also switch to eraser mode by pressing the eraser button. Clicking on the pen icon will switch you back to the drawing mode on your side.
 
 ## Credits
-[Soccer field background](https://clipartfest.com/download/021ec02162b694153e20bc6c8f6c4c1361a387e7.html)
+[Soccer field background](https://clipartfest.com/download/021ec02162b694153e20bc6c8f6c4c1361a387e7.html)<br />
 Ozan Can Altıok (oaltiok15 at ku dot edu dot tr) - [Koç University IUI Laboratory](http://iui.ku.edu.tr)
