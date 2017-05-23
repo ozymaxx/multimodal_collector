@@ -22,8 +22,8 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements SurfaceHolder.Callback {
 
-    private static String mFileName = Environment.getExternalStorageDirectory().getAbsolutePath() + "/aq.3gp";
-    private static String videoFileName = Environment.getExternalStorageDirectory().getAbsolutePath() + "/aqv.mp4";
+    private static String mFileName = Environment.getExternalStorageDirectory().getAbsolutePath() + "/test.3gp";
+    private static String videoFileName = Environment.getExternalStorageDirectory().getAbsolutePath() + "/test.mp4";
 
     private CanvasView queryCanvas;
     private MediaRecorder soundRecorder;
