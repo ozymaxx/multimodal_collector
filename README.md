@@ -22,6 +22,12 @@ Since there is not any available APK, you should install it manually through the
 * Now both the experimenter and participant can draw anything. Whatever drawn in one side will be replicated on the other side. Moreover, if one gets his/her pen closer to the screen, then the other can see the location of that pen on his/her own screen. Please also note that your camera is recording your video while drawing.
 * If you want to clean the shared canvas, press red X button. You can also switch to eraser mode by pressing the eraser button. Clicking on the pen icon will switch you back to the drawing mode on your side.
 
+## Outputs
+* **Sketch stream**: This is a plain text file with `.sketch` extension. It contains all the strokes drawn so far. However, due to the synchronization issues, we recommend using the one generated in the participant's side.
+* **Video**: Video recorded on the experimenter's end.
+<br />
+These two files are named with the timestamp, at the root directory of your tablet.
+
 ## Credits
 [Soccer field background](https://clipartfest.com/download/021ec02162b694153e20bc6c8f6c4c1361a387e7.html)<br />
 Ozan Can Altıok (oaltiok15 at ku dot edu dot tr) - [Koç University IUI Laboratory](http://iui.ku.edu.tr)
