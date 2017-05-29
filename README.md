@@ -17,7 +17,7 @@ Since there is not any available APK, you should install it manually through the
 ## How to run
 * Open the application
 * Press Next and proceed to the next page. Then click Next over. These pages are supposed to give information (the things that are going to be recorded, the aim of using this application) about the application. 
-* Follow the above steps on the [experimenter's tablet](https://github.com/ozymaxx/socceruserstudy_experimenter).
+* Follow the above steps on the [experimenter's tablet](https://github.com/ozymaxx/multimodal_collector_experimenter).
 * You'll see the checkbox marked, meaning that the tablets has paired each other. Then click Next on both.
 * Now both the experimenter and participant can draw anything. Whatever drawn in one side will be replicated on the other side. Moreover, if one gets his/her pen closer to the screen, then the other can see the location of that pen on his/her own screen. Please also note that your camera is recording your video while drawing.
 * If you want to clean the shared canvas, press red X button. You can also switch to eraser mode by pressing the eraser button. Clicking on the pen icon will switch you back to the drawing mode on your side.
