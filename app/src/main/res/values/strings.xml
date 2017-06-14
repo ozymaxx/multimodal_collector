@@ -1,6 +1,6 @@
 <resources>
-    <!--
-    <string name="app_name">IUI Video Experiment - 1</string>
+    
+    <string name="app_name">IUI Video Study - 1</string>
     <string name="clear_canvas">Clear Canvas</string>
     <string name="highlight_title">Highlighting Colors</string>
     <string name="highlight_brown">Brown</string>
@@ -9,9 +9,9 @@
     <string name="highlight_blue">Blue</string>
     <string name="highlight_red">Red</string>
     <string name="drawingmode">Drawing Mode</string>
-    <string name="exit">Exit</string> -->
+    <string name="exit">Exit</string>
 
-    <string name="app_name">IUI Video Deneyi - 1</string>
+    <!--<string name="app_name">IUI Video Deneyi - 1</string>
     <string name="clear_canvas">Temizle</string>
     <string name="highlight_title">Çizim Belirtme Renkleri</string>
     <string name="highlight_brown">K.Rengi</string>
@@ -20,22 +20,22 @@
     <string name="highlight_blue">Mavi</string>
     <string name="highlight_red">Kırmızı</string>
     <string name="drawingmode">Çizim Modu</string>
-    <string name="exit">Çıkış</string>
+    <string name="exit">Çıkış</string>-->
 
-    <!--
+    
     <string name="welcome_message">Thanks for the participation. Your participation will be very beneficial for us.
-        When you are ready to go just click on the button below.
+        Tap the button below to start.
         \n\n
-        Please keep in mind that we will be recording your sketch. Moreover, during the experiment, the environment will
+        Please keep in mind that your drawing will be recorded. Additionally, the environment will
         be monitored with two cameras.
     </string>
     <string name="next_step">Next</string>
     <string name="consent">By clicking Next you will have allowed the data collected in this study to be used for academic and scientific purposes.</string>
     <string name="applicationstate">Connection Status</string>
     <string name="other_tablet">Other Tablet</string>
-    <string name="server">Station for Data Collection</string> -->
+    <string name="server">Data Collection Server</string>
 
-    <string name="welcome_message">Çalışmamıza katıldığınız için teşekkürler. Katılımınız çalışmamızı yürütmemiz için
+    <!--<string name="welcome_message">Çalışmamıza katıldığınız için teşekkürler. Katılımınız çalışmamızı yürütmemiz için
         çok faydalı olacaktır. Hazır olduğunuzda aşağıdaki butona tıklayarak çalışmaya başlayabilirsiniz.
         \n\n
         Deney boyunca çiziminizi kaydedeceğimizi aklınızda bulundurun. Bunun yanında, deney boyunca ortam iki kamera ile
@@ -45,5 +45,5 @@
     <string name="consent">Sonraki Adım\'a tıkladığınızda bu deneyde toplanan verilerin akademik ve bilimsel kullanımına izin vermiş olacaksınız.</string>
     <string name="applicationstate">Uygulama Bağlantı Kontrolü</string>
     <string name="other_tablet">Diğer Tablet</string>
-    <string name="server">Bilgileri Toplama Sunucusu</string>
+    <string name="server">Bilgileri Toplama Sunucusu</string>-->
 </resources>
